@@ -1,0 +1,102 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+} 
+<div class="container-fluid p-0 ">
+    <div class="row m-0 p-0 ">
+  
+        <div class="col-md-7  ">
+           <img src="~/Images/ll.jpg" class="img-fluid ms-5  w-100 " />
+          
+        </div>
+        <div class="col-md-5 mt-5 d-flex justify-content-center  m-0">
+     
+                
+                <style>
+                   /*  body {
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        background-color: #f0f2f5;
+                        margin: 0;
+                    } */
+
+                    .sign-in-container {
+                        background-color: white;
+                       
+                        box-shadow: 0 4px 8px rgba(0.1, 0.1, 0.1, 0.2);
+                        width: 400px;
+                        padding: 40px;
+                        height:90%;
+                        box-sizing: border-box;
+                      
+                    }
+
+                        .sign-in-container h2 {
+                            margin-top: 0;
+                            font-size: 20px;
+                            text-align: center;
+                        }
+
+                    .sign-in-button {
+                        width: 100%;
+                        margin-bottom: 10px;
+                    }
+
+                    .divider {
+                        display: flex;
+                        align-items: center;
+                        text-align: center;
+                        margin: 20px 0;
+                    }
+
+                        .divider::before, .divider::after {
+                            content: '';
+                            flex: 1;
+                            border-bottom: 1px solid #ddd;
+                        }
+
+                        .divider:not(:empty)::before {
+                            margin-right: .25em;
+                        }
+
+                        .divider:not(:empty)::after {
+                            margin-left: .25em;
+                        }
+                </style>
+
+         
+
+                <div class="sign-in-container py-5">
+                    <h2>Sign-in to Insurance bazaar</h2>
+                    <p class="form-text">For a more personalised experience, sign in with your registered mobile number</p>
+                    <div class="form-group">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">
+                                    <img src="https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg" alt="India Flag" width="20" height="30">
+                                </span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="Mobile Number">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary sign-in-button">Sign in with OTP</button>
+                    <div class="divider">or</div>
+                  
+                    <button class="btn btn-danger sign-in-button">Sign in with Google</button>
+                </div>
+
+               
+
+
+
+        </div>
+         
+    </div>
+    
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

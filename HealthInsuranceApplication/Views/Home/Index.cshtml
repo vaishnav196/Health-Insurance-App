@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f8fc;
+        }
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            color: #333;
+        }
+        .header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+        .header .tag {
+            display: inline-block;
+            margin: 10px 10px;
+            padding: 5px 15px;
+            border-radius: 20px;
+            background-color: #e0e7ff;
+            color: #666;
+        }
+        .banner {
+            position: relative;
+            background-color: white;
+            color: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        .banner img {
+            width: 100%;
+            border-radius: 10px;
+            float:right;
+        }
+        .banner .content {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            max-width: 300px;
+        }
+        .banner .content h2 {
+            font-size: 2em;
+            margin: 0;
+        }
+        .banner .content p {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .banner .content .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 10px;
+            color: #fff;
+            background-color: #6c63ff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .grid-item {
+            flex: 1 1 calc(25% - 20px);
+            max-width: calc(25% - 20px);
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .grid-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .grid-item h3 {
+            font-size: 1.2em;
+            margin: 10px 0;
+        }
+        .grid-item p {
+            color: #666;
+        }
+    </style>
+<div class="container-fluid d-flex justify-content-between ">
+    <div class="header">
+        <h1>Let's find you the Best Insurance</h1>
+        <p class="tag">50+ insurers with one of the best prices</p>
+        <p class="tag">Quick, easy & hassle free</p>
+    </div>
+    <div class="banner ">
+        <img src="~/Images/hl.jpg" alt="Banner Image" class="w-50">
+        <div class="content">
+            <h2>₹1 Crore</h2>
+            <p>Term plan starting  ₹473/month</p>
+            <a href="#" class="btn">View plans</a>
+        </div>
+    </div>
+</div>
+
+     <div class="container">
+    
+    
+        <div class="grid">
+            <a class="grid-item nav-link" href="">
+                <img src="~/Images/th.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Term Life Insurance</h3>
+                <p>Upto 10% Discount</p>
+            </a>
+            <a class="grid-item nav-link" href="">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Health Insurance</h3>
+                <p>Cashless Anywhere</p>
+            </a>
+            <div class="grid-item">
+            <img src="~/Images/in.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Investment Plans</h3>
+                <p>New Fund Launch</p>
+            </div>
+            <div class="grid-item">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Car Insurance</h3>
+                <p>Upto 85% Discount</p>
+            </div>
+            <div class="grid-item">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>2 Wheeler Insurance</h3>
+                <p></p>
+            </div>
+            <div class="grid-item">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Family Health Insurance</h3>
+                <p>Upto 25% Discount</p>
+            </div>
+            <div class="grid-item">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Travel Insurance</h3>
+                <p></p>
+            </div>
+            <div class="grid-item">
+            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Term Insurance (Women)</h3>
+                <p>Upto 20% Cheaper</p>
+ 
+        </div>
+    </div>
+
+
