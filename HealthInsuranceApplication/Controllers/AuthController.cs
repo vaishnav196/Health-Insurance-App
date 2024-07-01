@@ -1,82 +1,135 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
-namespace YourNamespace.Controllers
+public class AuthController : Controller
 {
-    public class AuthController : Controller
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+
+    public AuthController(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        _httpClientFactory = httpClientFactory;
+        _httpContextAccessor = httpContextAccessor;
+    }
 
-        public AuthController(IHttpClientFactory httpClientFactory)
+    [HttpPost]
+    [Route("/SendOtp")]
+    public async Task<IActionResult> SendOtp(string mobile, string email)
+    {
+        var client = _httpClientFactory.CreateClient();
+        var requestBody = new { mobile, email };
+        var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("https://localhost:7027/sendotp", content);
+
+        if (response.IsSuccessStatusCode)
         {
-            _httpClientFactory = httpClientFactory;
+            // Set session variables for email and mobile
+            HttpContext.Session.SetString("Email", email);
+            HttpContext.Session.SetString("Mobile", mobile);
+
+            var responseData = await response.Content.ReadAsStringAsync();
+            TempData["SuccessMessage"] = JsonConvert.DeserializeObject<dynamic>(responseData)?.message;
+
+            return Ok(new { message = "OTP sent successfully." });
         }
-
-        public IActionResult Index()
+        else
         {
-            return View();
-        }
+            var responseData = await response.Content.ReadAsStringAsync();
+            var errorMessage = JsonConvert.DeserializeObject<dynamic>(responseData)?.message;
 
-        [HttpPost]
-        public async Task<IActionResult> SendOtp([FromBody] SendOtpRequest request)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var jsonContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7125/Api/Login/sendotp", jsonContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ResponseMessage>(responseData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return Json(result);
-            }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                var errorResult = JsonSerializer.Deserialize<ResponseMessage>(errorData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return BadRequest(errorResult);
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> VerifyOtp([FromBody] VerifyOtpRequest request)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var jsonContent = new StringContent(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("https://localhost:7125/Api/Login/verifyotp", jsonContent);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseData = await response.Content.ReadAsStringAsync();
-                var result = JsonSerializer.Deserialize<ResponseMessage>(responseData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return Json(result);
-            }
-            else
-            {
-                var errorData = await response.Content.ReadAsStringAsync();
-                var errorResult = JsonSerializer.Deserialize<ResponseMessage>(errorData, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-                return BadRequest(errorResult);
-            }
+            return BadRequest(new { message = errorMessage });
         }
     }
 
-    public class SendOtpRequest
+    [HttpPost]
+    [Route("/VerifyOtp")]
+    public async Task<IActionResult> VerifyOtp(string otp)
     {
-        public string Mobile { get; set; }
-        public string Email { get; set; }
+        var email = HttpContext.Session.GetString("Email");
+        var mobile = HttpContext.Session.GetString("Mobile");
+
+        if (email == null || mobile == null)
+        {
+            return BadRequest(new { message = "Session expired. Please try again." });
+        }
+
+        var client = _httpClientFactory.CreateClient();
+        var requestBody = new { mobile, otp };
+        var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
+
+        var response = await client.PostAsync("https://localhost:7027/verifyotp", content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = await response.Content.ReadAsStringAsync();
+            TempData["SuccessMessage"] = JsonConvert.DeserializeObject<dynamic>(responseData)?.message;
+
+            return RedirectToAction("Index", "Home");
+        }
+        else
+        {
+            var responseData = await response.Content.ReadAsStringAsync();
+            var errorMessage = JsonConvert.DeserializeObject<dynamic>(responseData)?.message;
+
+            return BadRequest(new { message = errorMessage });
+        }
+    }
+    public IActionResult Index()
+    {
+        return View();
     }
 
-    public class VerifyOtpRequest
+
+    public IActionResult Login()
     {
-        public string Otp { get; set; }
+        return View();
     }
 
-    public class ResponseMessage
+ 
+    public async Task GoogleLogin()
     {
-        public string Message { get; set; }
+        await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
+        {
+            RedirectUri = Url.Action("GoogleResponse")
+        });
+    }
+ 
+    public async Task<IActionResult> GoogleResponse()
+    {
+        var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+        var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+        {
+            claim.Issuer,
+            claim.OriginalIssuer,
+            claim.Type,
+            claim.Value
+
+        });
+       
+
+        // Redirect to HomeController/Index
+        return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult SignOut()
+    {
+        HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        var storedcookies = Request.Cookies.Keys;
+        foreach (var cookie in storedcookies)
+        {
+            Response.Cookies.Delete(cookie);
+        }
+        return RedirectToAction("SignIn");
     }
 }
+
+

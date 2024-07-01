@@ -29,25 +29,23 @@
                                 </span>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Auth" asp-action="SignOut">Logout</a>
-                            </li>
+                           
                         }
-                        else
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-controller="Home" asp-action="Login">Login</a>
-                            </li>
+                     
+                      
+                           @*  <li class="nav-item">
+                                <a class="nav-link" asp-controller="Auth" asp-action="Login">Login</a>
+                            </li> *@
                             <li class="nav-item me-auto ms-5">
                                 <a class="nav-link text-black " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
-                        }
-                       
-                        @*   <li class="nav-item ms-auto ">
-                        <a class="nav-link text-dark " asp-area="" asp-controller="Home" asp-action="Privacy"></a>
-                        </li> *@
                         <li class="nav-item">
-                            <a class="nav-link btn btn-success btn-sm  px-4 py-1 mt-1 ms-auto fw-bold text-white" asp-area="" asp-controller="Home" asp-action="Login">Sign In</a>
+                            <a class="nav-link" asp-controller="Auth" asp-action="SignOut">Logout</a>
+                        </li>
+                       
+                     
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-success btn-sm  px-4 py-1 mt-1 ms-auto fw-bold text-white" asp-area="" asp-controller="Auth" asp-action="Login">Sign In</a>
                         </li>
                     
                        
