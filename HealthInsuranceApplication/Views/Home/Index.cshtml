@@ -101,6 +101,75 @@
         .grid-item p {
             color: #666;
         }
+
+
+    .contact-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 50px;
+    }
+
+    .contact-info {
+        max-width: 600px;
+        margin-right: 50px;
+    }
+
+        .contact-info h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin-bottom: 30px;
+        }
+
+        .contact-info .contact-box {
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+    .contact-image img {
+        max-width: 100%;
+        height: auto;
+    }
+
+
+    .promo-section {
+        background-color: #d32f2f;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .promo-text {
+        flex: 1;
+        margin-left: 20px;
+    }
+
+    .promo-button {
+        background-color: white;
+        color: #d32f2f;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+        .promo-button:hover {
+            background-color: #f5f5f5;
+            color: #c62828;
+        }
+
+    .promo-image img {
+        max-width: 100px;
+        height: auto;
+    }
+  
     </style>
 <div class="container d-flex justify-content-between ">
     <div class="header">
@@ -122,8 +191,6 @@
 </div>
 
      <div class="container">
-    
-    
         <div class="grid">
             <a class="grid-item nav-link" href="">
                 <img src="~/Images/th.jpg" alt="Term Life Insurance" width="100px" height="50%">
@@ -168,4 +235,43 @@
         </div>
     </div>
 
+
+    <section class="promo-section mt-5 me-3">
+
+        <div class="container-fluid">
+            <div class="promo-section">
+                <div class="promo-image">
+                    <img src="~/Images/home.jpg" alt="Promo Image">
+                </div>
+                <div class="promo-text">
+                    <h5>Buying Optima Secure is now easier with our No cost installment*^ plans!</h5>
+                </div>
+                <div>
+                    <button class="promo-button">BUY ONLINE</button>
+                </div>
+            </div>
+        </div>
+
+</section>
+
+    <section class="container bg-white">
+        <div class="contact-section">
+            <div class="contact-info">
+                <h2>Have a question? Here to help.</h2>
+                <p>Our friendly customer support team is your extended family. Speak your heart out. They listen with undivided attention to resolve your concerns. Give us a call, request a callback or drop us an email, we’re here to help.</p>
+                <div class="contact-box">
+                    <h5>General Enquiries</h5>
+                    <p><i class="fas fa-envelope"></i> Icare@Ibazaar.com</p>
+                </div>
+                <div class="contact-box">
+                    <h5>Customer Sales Enquiries</h5>
+                    <p><i class="fas fa-phone"></i> 2800 - 200 - 8787</p>
+                </div>
+            </div>
+            <div class="contact-image">
+                <img src="~/Images/help.png" alt="Customer Support" class="img-fluid">
+            </div>
+        </div>
+
+    </section>
 

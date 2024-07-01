@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 public class AuthController : Controller
 {
@@ -98,27 +99,39 @@ public class AuthController : Controller
     public async Task GoogleLogin()
     {
         await HttpContext.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
-        {
+        {   
             RedirectUri = Url.Action("GoogleResponse")
         });
     }
- 
+
     public async Task<IActionResult> GoogleResponse()
     {
         var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-        var claims = result.Principal.Identities.FirstOrDefault().Claims.Select(claim => new
+
+        if (result?.Principal != null)
         {
-            claim.Issuer,
-            claim.OriginalIssuer,
-            claim.Type,
-            claim.Value
+            var claims = result.Principal.Identities.FirstOrDefault().Claims;
+            var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
 
-        });
-       
+            if (!string.IsNullOrEmpty(email))
+            {
+                HttpContext.Session.SetString("Email", email);
+            }
 
-        // Redirect to HomeController/Index
-        return RedirectToAction("Index", "Home");
+            // Assuming you have a method to get the mobile number, if required.
+            // var mobile = GetMobileNumberForUser(email);
+            // if (!string.IsNullOrEmpty(mobile))
+            // {
+            //     HttpContext.Session.SetString("Mobile", mobile);
+            // }
+
+            // Redirect to HomeController/Index
+            return RedirectToAction("Index", "Home");
+        }
+
+        return RedirectToAction("Login", "Auth");
     }
+
 
     public IActionResult SignOut()
     {
@@ -128,7 +141,7 @@ public class AuthController : Controller
         {
             Response.Cookies.Delete(cookie);
         }
-        return RedirectToAction("SignIn");
+        return RedirectToAction("Login","Auth");
     }
 }
 

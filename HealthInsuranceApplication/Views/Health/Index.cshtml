@@ -1,161 +1,13 @@
-﻿@* 
-
-<style>
-  
-
-    .cont{
-        max-width: 600px;
-        margin: auto;
-        background-color: ghostwhite;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .member-selection {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
-
-        .member-selection div {
-            flex: 1 1 calc(33% - 20px);
-            max-width: calc(33% - 20px);
-            text-align: center;
-        }
-
-            .member-selection div input {
-                display: none;
-            }
-
-            .member-selection div label {
-                display: block;
-                padding: 10px;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                cursor: pointer;
-            }
-
-            .member-selection div input:checked + label {
-                background-color: #6c63ff;
-                color: #fff;
-                border-color: #6c63ff;
-            }
-
-    .continue-btn {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        background-color: #6c63ff;
-        color: #fff;
-        text-align: center;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 20px;
-    }
-</style>
-
-
-<div class="container cont mt-5">
-    <h1 class="text-danger text-center mb-5">Select Members to Insure</h1>
-    <form asp-action="AgeSelection" asp-controller="Health" class="member-selection">
-        <div>
-            <input type="checkbox" id="self" name="members" value="self">
-            <label for="self">Self</label>
-        </div>
-        <div>
-            <input type="checkbox" id="wife" name="members" value="wife">
-            <label for="wife">Wife</label>
-        </div>
-        <div>
-            <input type="checkbox" id="son" name="members" value="son">
-            <label for="son">Son</label>
-        </div>
-        <div>
-            <input type="checkbox" id="daughter" name="members" value="daughter">
-            <label for="daughter">Daughter</label>
-        </div>
-        <div>
-            <input type="checkbox" id="father" name="members" value="father">
-            <label for="father">Father</label>
-        </div>
-        <div>
-            <input type="checkbox" id="mother" name="members" value="mother">
-            <label for="mother">Mother</label>
-        </div>
-        <div>
-            <input type="checkbox" id="Grandmother" name="members" value="GrandMother">
-            <label for="Grandmother">Grand Mother</label>
-        </div>
-
-        <div>
-            <input type="checkbox" id="GrandFather" name="members" value="GrandFather">
-            <label for="GrandFather">Grand Father</label>
-        </div>
-
-        <div>
-            <input type="checkbox" id="FatherInLaw" name="members" value="FatherInLaw">
-            <label for="FatherInLaw">Father-In-Law</label>
-        </div>
-
-        <div>
-            <input type="checkbox" id="motherInLaw" name="members" value="motherInLaw">
-            <label for="motherInLaw">Mother-In-Law</label>
-        </div>
-    </form>
-    <button class="continue-btn" onclick="goToAgeSelection()">Continue</button>
-</div>
-
-
-@section scripts {
-    <script>
-        function goToAgeSelection() {
-            const selectedMembers = [];
-            document.querySelectorAll('input[name="members"]:checked').forEach((checkbox) => {
-                selectedMembers.push(checkbox.value);
-            });
-            if (selectedMembers.length > 0) {
-                sessionStorage.setItem('selectedMembers', JSON.stringify(selectedMembers));
-                window.location.href = '/Health/AgeSelection'; // Redirect to your AgeSelectionForm action
-            } else {
-                alert('Please select at least one member to insure.');
-            }
-        }
-
-       
-    </script>
-    <script>
-        function goToAgeSelection() {
-            const selectedMembers = [];
-            document.querySelectorAll('input[name="members"]:checked').forEach((checkbox) => {
-                selectedMembers.push(checkbox.value);
-            });
-            if (selectedMembers.length > 0) {
-                const queryString = selectedMembers.map(member => members[] = ${ member }).join('&');
-                window.location.href = '/Health/AgeSelection' ${ queryString };
-            } else {
-                alert('Please select at least one member to insure.');
-            }
-        }
-
-
-    </script>
-}
-
-
-
- *@
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Members</title>
+    <title>Select Members to Insure</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .cont {
-            max-width: 600px;
+            max-width: 700px;
             margin: auto;
             background-color: ghostwhite;
             padding: 20px;
@@ -193,6 +45,12 @@
                     border-color: #6c63ff;
                 }
 
+                .member-selection div i {
+                    font-size: 24px;
+                    display: block;
+                    margin-bottom: 10px;
+                }
+
         .continue-btn {
             display: block;
             width: 100%;
@@ -205,6 +63,16 @@
             cursor: pointer;
             margin-top: 20px;
         }
+
+        .fas{
+        padding:12px 4px;
+        border:1px solid black;
+        border-radius:25px;
+        display:inline-block;
+        width:50px;
+        margin-left: 60px;
+       
+        }
     </style>
 </head>
 <body>
@@ -213,43 +81,73 @@
         <form class="member-selection">
             <div>
                 <input type="checkbox" id="self" name="members" value="self">
-                <label for="self">Self</label>
+                <label for="self" class="">
+                    <i class="fas fa-user"></i>
+                    Self
+                </label>
             </div>
             <div>
                 <input type="checkbox" id="wife" name="members" value="wife">
-                <label for="wife">Wife</label>
+                <label for="wife">
+                    <i class="fas fa-female"></i>
+                    Wife
+                </label>
             </div>
             <div>
                 <input type="checkbox" id="son" name="members" value="son">
-                <label for="son">Son</label>
+                <label for="son">
+                    <i class="fas fa-child"></i>
+                    Son
+                </label>
             </div>
             <div>
                 <input type="checkbox" id="daughter" name="members" value="daughter">
-                <label for="daughter">Daughter</label>
+                <label for="daughter">
+                    <i class="fas fa-child"></i>
+                    Daughter
+                </label>
             </div>
             <div>
                 <input type="checkbox" id="father" name="members" value="father">
-                <label for="father">Father</label>
+                <label for="father">
+                    <i class="fas fa-male"></i>
+                    Father
+                </label>
             </div>
             <div>
                 <input type="checkbox" id="mother" name="members" value="mother">
-                <label for="mother">Mother</label>
+                <label for="mother">
+                    <i class="fas fa-female"></i>
+                    Mother
+                </label>
             </div>
             <div>
-                <input type="checkbox" id="Grandmother" name="members" value="GrandMother">
-                <label for="Grandmother">Grand Mother</label>
+                <input type="checkbox" id="grandmother" name="members" value="grandmother">
+                <label for="grandmother">
+                    <i class="fas fa-female"></i>
+                    Grand Mother
+                </label>
             </div>
             <div>
-                <input type="checkbox" id="GrandFather" name="members" value="GrandFather">
-                <label for="GrandFather">Grand Father</label>
+                <input type="checkbox" id="grandfather" name="members" value="grandfather">
+                <label for="grandfather">
+                    <i class="fas fa-male"></i>
+                    Grand Father
+                </label>
             </div>
             <div>
-                <input type="checkbox" id="FatherInLaw" name="members" value="FatherInLaw">
-                <label for="FatherInLaw">Father-In-Law</label>
+                <input type="checkbox" id="fatherinlaw" name="members" value="fatherinlaw">
+                <label for="fatherinlaw">
+                    <i class="fas fa-male"></i>
+                    Father-In-Law
+                </label>
             </div>
             <div>
-                <input type="checkbox" id="motherInLaw" name="members" value="motherInLaw">
-                <label for="motherInLaw">Mother-In-Law</label>
+                <input type="checkbox" id="motherinlaw" name="members" value="motherinlaw">
+                <label for="motherinlaw">
+                    <i class="fas fa-female"></i>
+                    Mother-In-Law
+                </label>
             </div>
         </form>
         <button class="continue-btn" onclick="goToAgeSelection()">Continue</button>

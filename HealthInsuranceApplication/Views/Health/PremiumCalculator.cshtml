@@ -1,18 +1,15 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿
+<style>
 
-
-    <div class="container  mt-5">
-       <div class="row">
-           <div class="col-md-8 card">
-            <h1 class="text-danger text-center mb-5">Calculate Your Premium</h1>
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 card">
+            <h1 class="text-black text-center mb-5 ">Calculate Your Premium</h1>
             <div>
                 <label for="coverage-slider" class="my-2 fw-bolder">Coverage Amount (in Lakh):</label>
-                <input type="range" id="coverage-slider" name="coverage-slider" min="5" max="100" value="10" oninput="updateCoverageValue(this.value)" class="">
-                <span id="coverage-value">10 Lakh</span>
+                <input type="range" id="coverage-slider" name="coverage-slider" min="7" max="100" value="7" oninput="updateCoverageValue(this.value)" class="">
+                <h3 id="coverage-value" class="font-monospace text-danger " >10 Lakh</h3>
             </div>
             <div>
                 <label for="policy-period" class="fw-bolder my-2">Policy Period:</label>
@@ -23,78 +20,110 @@
                     <option value="3">3 Years</option>
                 </select>
             </div>
-            <button class="continue-btn  mt-3 btn btn-outline-danger w-50" onclick="calculatePremium()">Calculate Premium</button>
-           
-           </div>
-
-      <div class="col-md-4">
+            <div>
+                <label class="fw-bolder my-2">Additional Coverage:</label>
+                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="500" onclick="updateAdditionalCoverage()"> ₹50,00
+                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="350" onclick="updateAdditionalCoverage()"> ₹50,00
+                 <input type="checkbox" id="additional-coverage" name="additional-coverage" value="299" onclick="updateAdditionalCoverage()"> ₹50,00
+                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="190" onclick="updateAdditionalCoverage()"> ₹50,00
+            </div>
+            <button class="continue-btn mt-3 btn btn-outline-danger w-50" onclick="calculatePremium()">Calculate Premium</button>
+        </div>
+        <div class="col-md-4">
             <div class="card" style="width: 18rem;">
-               
                 <div class="card-body">
-                    <h3 class="card-title">Plan Summary</h3>
+                    <h3 class="card-title" id="selected-plan-name">Plan Summary</h3>
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item fw-bold">GST included:18%</li>
-                    <li class="list-group-item fw-bold"> Additional Taxes: 00.00</li>
+                    <li class="list-group-item fw-bold">Additional Taxes: 00.00</li>
                     <li class="list-group-item fw-bold" id="premium-result">Total Premium:</li>
                 </ul>
                 <div class="card-body">
-                   
-                    <button class="btn-danger btn " onclick="payNow()">Buy Plan</button>
+                    <button class="btn-danger btn" onclick="payNow()">Buy Plan</button>
                 </div>
             </div>
-      </div>
-       
+        </div>
     </div>
-    </div>
+</div>
 
-
-    @section scripts{
+@section scripts {
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
+        window.onload = function () {
+            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+            document.getElementById('selected-plan-name').innerText = selectedPlan.name + ' Plan Summary';
+        };
+
         function updateCoverageValue(value) {
             document.getElementById('coverage-value').innerText = value + ' Lakh';
         }
 
+        function updateAdditionalCoverage() {
+            const checkbox = document.getElementById('additional-coverage');
+            return checkbox.checked ? parseInt(checkbox.value) : 0;
+        }
+
         function calculatePremium() {
+            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
             const coverage = document.getElementById('coverage-slider').value;
             const period = document.getElementById('policy-period').value;
+            const additionalCoverage = updateAdditionalCoverage();
 
-            // Premium calculation logic
-            const basePrice = 10000;
-            const coverageMultiplier = coverage / 10;
+            // Calculate base premium
+            const basePrice = selectedPlan.price;
+            const coverageMultiplier = (coverage * 100000) / selectedPlan.baseCoverage;
             const periodMultiplier = period;
 
-            const premium = basePrice * coverageMultiplier * periodMultiplier;
+            let premium = basePrice * coverageMultiplier * periodMultiplier;
+            premium += additionalCoverage;
 
             document.getElementById('premium-result').innerText = 'Total Premium: ₹' + premium.toFixed(2);
         }
+
         function payNow() {
-            const premium = parseFloat(document.getElementById('premium-result').innerText.split('₹')[1]);
+            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+            const premium = document.getElementById('premium-result').innerText.split('₹')[1].trim();
 
             const options = {
-                "key": "",
-                "amount": premium * 100, // Razorpay amount should be in paise
+                "key": "rzp_test_nVRTaBmmVZ10zu", // Enter the Key ID generated from the Razorpay Dashboard
+                "amount": premium * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                 "currency": "INR",
                 "name": "Insurance Premium",
-                "description": "Premium Payment",
+                "description": "Test Transaction",
+                "order_id": "", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
                 "handler": function (response) {
-                    alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                    alert(response.razorpay_payment_id);
+                    alert(response.razorpay_order_id);
+                    alert(response.razorpay_signature);
+                    generateInvoice();
                 },
                 "prefill": {
-                    "name": "John Doe",
-                    "email": "john.doe@example.com",
+                    "name": "Gaurav Kumar",
+                    "email": "gaurav.kumar@example.com",
                     "contact": "9999999999"
                 },
+                "notes": {
+                    "address": "Razorpay Corporate Office"
+                },
                 "theme": {
-                    "color": "#3399cc"
+                    "color": "#F37254"
                 }
             };
-            const rzp = new Razorpay(options);
-            rzp.open();
+
+            const rzp1 = new Razorpay(options);
+            rzp1.on('payment.failed', function (response) {
+                alert(response.error.code);
+                alert(response.error.description);
+                alert(response.error.source);
+                alert(response.error.step);
+                alert(response.error.reason);
+                alert(response.error.metadata.order_id);
+                alert(response.error.metadata.payment_id);
+            });
+
+            rzp1.open();
         }
     </script>
-
-
-    }
-   
+}
