@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+    <div class="container cont mt-5">
+        <h1 class="text-danger text-center mb-5">Select Policy Plan</h1>
+        <div id="policy-plans">
+            <!-- Dynamically generate policy plans here -->
+        </div>
+    </div>
+
+    @section scripts{
+        <script>
+            window.onload = function () {
+                const selectedMembers = JSON.parse(sessionStorage.getItem('selectedMembers'));
+                const ageSelections = JSON.parse(sessionStorage.getItem('ageSelections'));
+                const policyPlans = [
+                    {
+                        name: 'Basic Plan',
+                        coverage: 500000,
+                        price: 10000,
+                    },
+                    {
+                        name: 'Premium Plan',
+                        coverage: 1000000,
+                        price: 20000,
+                    }
+                ];
+
+                const container = document.getElementById('policy-plans');
+
+                policyPlans.forEach(plan => {
+                    const div = document.createElement('div');
+                    div.innerHTML = `<div class="card w-25 d-flex ps-3 my-2 bg-light">
+                                         <img src="/Images/h.jpg" class="img-fluid" width="100" height="100"/>
+                                        <h3>${plan.name}</h3>
+                                                <p>Claim can be made for hospitalization related to Diabetes, Hypertension, Hyperlipidemia & Asthma after initial wait period of 30 days</p>
+                                        <p>Coverage: ₹${plan.coverage}</p>
+                                        <p>Total Premium: ₹${plan.price}</p>
+                                        <button onclick="selectPlan('${plan.name}')" class="btn btn-primary w-25 my-2 mx-2">View</button>
+                                    </div>`;
+
+               
+                    container.appendChild(div);
+                });
+            };
+
+            function selectPlan(planName) {
+                sessionStorage.setItem('selectedPlan', planName);
+                window.location.href = '/Health/PremiumCalculator';
+            }
+        </script>
+    }
+  
+

@@ -11,23 +11,43 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark text-black bg-light border-bottom box-shadow mb-3  position-sticky top-0 position-absolute">
             <div class="container-fluid">
-                <a class="navbar-brand me-auto" asp-area="" asp-controller="Home" asp-action="Index">Health-Insurance</a>
+                <img class="navbar-brand me-auto ms-5" asp-area="" asp-controller="Home" asp-action="Index">IBAZZAR</img>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse  collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item me-auto">
-                            <a class="nav-link text-dark " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var email = Context.Session.GetString("Email");
+                            <li class="nav-item">
+                                <span class="navbar-text">
+                                    @email
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Auth" asp-action="SignOut">Logout</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Home" asp-action="Login">Login</a>
+                            </li>
+                            <li class="nav-item me-auto ms-5">
+                                <a class="nav-link text-black " asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+                        }
+                       
                         @*   <li class="nav-item ms-auto ">
                         <a class="nav-link text-dark " asp-area="" asp-controller="Home" asp-action="Privacy"></a>
                         </li> *@
                         <li class="nav-item">
-                            <a class="nav-link btn btn-success text-dark px-4 py-1 mt-1 ms-auto fw-bold text-white" asp-area="" asp-controller="Home" asp-action="Login">Sign In</a>
+                            <a class="nav-link btn btn-success btn-sm  px-4 py-1 mt-1 ms-auto fw-bold text-white" asp-area="" asp-controller="Home" asp-action="Login">Sign In</a>
                         </li>
                     
                        

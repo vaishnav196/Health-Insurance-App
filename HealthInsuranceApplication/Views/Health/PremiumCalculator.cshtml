@@ -1,0 +1,100 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+    <div class="container  mt-5">
+       <div class="row">
+           <div class="col-md-8 card">
+            <h1 class="text-danger text-center mb-5">Calculate Your Premium</h1>
+            <div>
+                <label for="coverage-slider" class="my-2 fw-bolder">Coverage Amount (in Lakh):</label>
+                <input type="range" id="coverage-slider" name="coverage-slider" min="5" max="100" value="10" oninput="updateCoverageValue(this.value)" class="">
+                <span id="coverage-value">10 Lakh</span>
+            </div>
+            <div>
+                <label for="policy-period" class="fw-bolder my-2">Policy Period:</label>
+                <select id="policy-period" name="policy-period" class="form-control w-50">
+                    <option>--Select Year---</option>
+                    <option value="1">1 Year</option>
+                    <option value="2">2 Years</option>
+                    <option value="3">3 Years</option>
+                </select>
+            </div>
+            <button class="continue-btn  mt-3 btn btn-outline-danger w-50" onclick="calculatePremium()">Calculate Premium</button>
+           
+           </div>
+
+      <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+               
+                <div class="card-body">
+                    <h3 class="card-title">Plan Summary</h3>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item fw-bold">GST included 18%:</li>
+                    <li class="list-group-item fw-bold">Taxes:</li>
+                    <li class="list-group-item fw-bold" id="premium-result">Total Premium:</li>
+                </ul>
+                <div class="card-body">
+                   
+                    <button class="btn-danger btn " onclick="payNow()">Buy Plan</button>
+                </div>
+            </div>
+      </div>
+       
+    </div>
+    </div>
+
+
+    @section scripts{
+    <script>
+        function updateCoverageValue(value) {
+            document.getElementById('coverage-value').innerText = value + ' Lakh';
+        }
+
+        function calculatePremium() {
+            const coverage = document.getElementById('coverage-slider').value;
+            const period = document.getElementById('policy-period').value;
+
+            // Premium calculation logic
+            const basePrice = 10000;
+            const coverageMultiplier = coverage / 10;
+            const periodMultiplier = period;
+
+            const premium = basePrice * coverageMultiplier * periodMultiplier;
+
+            document.getElementById('premium-result').innerText = 'Total Premium: ₹' + premium.toFixed(2);
+        }
+        function payNow() {
+            const premium = parseFloat(document.getElementById('premium-result').innerText.split('₹')[1]);
+
+            const options = {
+                "key": "",
+                "amount": premium * 100, // Razorpay amount should be in paise
+                "currency": "INR",
+                "name": "Insurance Premium",
+                "description": "Premium Payment",
+                "handler": function (response) {
+                    alert('Payment successful! Payment ID: ' + response.razorpay_payment_id);
+                },
+                "prefill": {
+                    "name": "John Doe",
+                    "email": "john.doe@example.com",
+                    "contact": "9999999999"
+                },
+                "theme": {
+                    "color": "#3399cc"
+                }
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+    </script>
+
+
+    }
+   

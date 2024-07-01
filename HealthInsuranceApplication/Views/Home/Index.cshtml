@@ -2,13 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f7f8fc;
+        /*     background-color: #f7f8fc; */
         }
         .container {
             padding: 20px;
@@ -16,8 +15,11 @@
             margin: auto;
         }
         .header {
-            text-align: center;
-            margin-bottom: 20px;
+     
+        margin-bottom: 20px;
+        }
+        .bg-purp{
+        background-color: #e0e7ff;
         }
         .header h1 {
             font-size: 2.5em;
@@ -29,7 +31,7 @@
         }
         .header .tag {
             display: inline-block;
-            margin: 10px 10px;
+           
             padding: 5px 15px;
             border-radius: 20px;
             background-color: #e0e7ff;
@@ -37,11 +39,12 @@
         }
         .banner {
             position: relative;
-            background-color: white;
+        background-color: #e0e7ff;
             color: #333;
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 40px;
+           width:95%
         }
         .banner img {
             width: 100%;
@@ -51,12 +54,13 @@
         .banner .content {
             position: absolute;
             top: 20px;
-            left: 20px;
-            max-width: 300px;
+            right: 450px;
+            max-width:300px;
+            
         }
         .banner .content h2 {
             font-size: 2em;
-            margin: 0;
+            margin-right: 0px;
         }
         .banner .content p {
             font-size: 1.2em;
@@ -98,20 +102,23 @@
             color: #666;
         }
     </style>
-<div class="container-fluid d-flex justify-content-between ">
+<div class="container d-flex justify-content-between ">
     <div class="header">
         <h1>Let's find you the Best Insurance</h1>
         <p class="tag">50+ insurers with one of the best prices</p>
         <p class="tag">Quick, easy & hassle free</p>
     </div>
-    <div class="banner ">
-        <img src="~/Images/hl.jpg" alt="Banner Image" class="w-50">
+  
+
+    <div class="banner  ">
+        <img src="~/Images/banner.jpg" alt="Banner Image" class=" img-fluid w-50 h-100 ">
         <div class="content">
             <h2>₹1 Crore</h2>
             <p>Term plan starting  ₹473/month</p>
-            <a href="#" class="btn">View plans</a>
+            <a href="#" class="btn ">View plans</a>
         </div>
     </div>
+   
 </div>
 
      <div class="container">
@@ -123,10 +130,10 @@
                 <h3>Term Life Insurance</h3>
                 <p>Upto 10% Discount</p>
             </a>
-            <a class="grid-item nav-link" href="">
+            <a class="grid-item nav-link" asp-action="Index" asp-controller="Health">
             <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Health Insurance</h3>
-                <p>Cashless Anywhere</p>
+                <p>Protect Life Anywhere</p>
             </a>
             <div class="grid-item">
             <img src="~/Images/in.jpg" alt="Term Life Insurance" width="100px" height="50%">
@@ -134,28 +141,28 @@
                 <p>New Fund Launch</p>
             </div>
             <div class="grid-item">
-            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+            <img src="~/Images/car.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Car Insurance</h3>
                 <p>Upto 85% Discount</p>
             </div>
             <div class="grid-item">
-            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
-                <h3>2 Wheeler Insurance</h3>
-                <p></p>
+            <img src="~/Images/tw.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3 class="mt-4">2 Wheeler Insurance</h3>
+            <p>Upto 35% Discount</p>
             </div>
             <div class="grid-item">
-            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+            <img src="~/Images/fam.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Family Health Insurance</h3>
                 <p>Upto 25% Discount</p>
             </div>
             <div class="grid-item">
-            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
+            <img src="~/Images/tr.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Travel Insurance</h3>
-                <p></p>
+            <p>Upto 75% Discount</p>
             </div>
             <div class="grid-item">
-            <img src="~/Images/h.jpg" alt="Term Life Insurance" width="100px" height="50%">
-                <h3>Term Insurance (Women)</h3>
+            <img src="~/Images/home.jpg" alt="Term Life Insurance" width="100px" height="50%">
+                <h3>Home Insurance</h3>
                 <p>Upto 20% Cheaper</p>
  
         </div>

@@ -1,0 +1,37 @@
+﻿
+
+
+    <div class="container cont mt-5">
+        <h1 class="text-danger text-center mb-5">Select Ages for Members</h1>
+        <form id="age-form">
+            <!-- Dynamically generate age selection dropdowns here -->
+        </form>
+        <button class="continue-btn btn btn-outline-secondary w-25  d-block m-auto my-3" onclick="goToPolicySelection()">Continue</button>
+    </div>
+    <script>
+        window.onload = function () {
+            const selectedMembers = JSON.parse(sessionStorage.getItem('selectedMembers'));
+            const form = document.getElementById('age-form');
+
+            selectedMembers.forEach(member => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                               <h5> <label for="${member}-age" class="  fw-bolder  text-center w-50 ms-5 my-2">${member.charAt(0).toUpperCase() + member.slice(1)} Age:</label>  </h5>
+                                <select id="${member}-age" name="${member}-age" class='form-control d-block m-auto text-center w-50'>
+                                ${[...Array(100).keys()].map(i => `<option value="${i}">${i}</option>`).join('')}
+                            </select>
+                       `;
+                form.appendChild(div);
+            });
+        };
+
+        function goToPolicySelection() {
+            const ageSelections = {};
+            document.querySelectorAll('select').forEach((select) => {
+                ageSelections[select.name] = select.value;
+            });
+            sessionStorage.setItem('ageSelections', JSON.stringify(ageSelections));
+            window.location.href = '/Health/policySelection';
+        }
+    </script>
+
