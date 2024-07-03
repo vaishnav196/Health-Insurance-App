@@ -1,4 +1,5 @@
 ﻿<div class="container cont mt-5">
+    <a asp-action="Index" asp-controller="Health" class="nav-link">  <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Member selection</a>
     <h1 class="text-danger text-center mb-5">Select Ages for Members</h1>
     <form id="age-form">
         <!-- Dynamically generate age selection dropdowns here -->
@@ -32,3 +33,51 @@
         window.location.href = '/Health/policySelection';
     }
 </script>
+
+
+@* <div class="container cont mt-5">
+    <a asp-action="Index" asp-controller="Health" class="nav-link">  <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Member selection</a>
+    <h1 class="text-danger text-center mb-5">Select Ages for Members</h1>
+    <form id="age-form">
+        <!-- Dynamically generate age selection dropdowns here -->
+    </form>
+    <button class="continue-btn btn btn-outline-secondary w-25 d-block m-auto my-3" onclick="goToPolicySelection()">Continue</button>
+</div>
+
+<script>
+    window.onload = function () {
+        const selectedMembers = JSON.parse(sessionStorage.getItem('selectedMembers'));
+        const form = document.getElementById('age-form');
+
+        const ageRanges = [
+            "Below 10",
+            "11-20",
+            "21-30",
+            "31-40",
+            "41-50",
+            "51-60",
+            "60+"
+        ];
+
+        selectedMembers.forEach(member => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                    <h5><label for="${member}-age" class="fw-bolder text-center w-50 ms-5 my-2">${member.charAt(0).toUpperCase() + member.slice(1)} Age:</label></h5>
+                    <select id="${member}-age" name="${member}-age" class='form-control d-block m-auto text-center w-50'>
+                        ${ageRanges.map(range => `<option value="${range}">${range}</option>`).join('')}
+                    </select>
+                `;
+            form.appendChild(div);
+        });
+    };
+
+    function goToPolicySelection() {
+        const ageSelections = {};
+        document.querySelectorAll('select').forEach((select) => {
+            ageSelections[select.name] = select.value;
+        });
+        sessionStorage.setItem('ageSelections', JSON.stringify(ageSelections));
+        window.location.href = '/Health/policySelection';
+    }
+</script>
+ *@

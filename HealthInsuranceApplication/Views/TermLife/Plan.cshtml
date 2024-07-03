@@ -1,0 +1,174 @@
+﻿@{
+    ViewData["Title"] = "Plan";
+}
+
+
+<style>
+    .header {
+        text-align: center;
+        margin: 20px 0;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #343a40;
+        }
+
+    .card-custom {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 500px;
+        margin-bottom: 20px;
+        margin: 100px auto;
+    }
+
+    .card-header {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+
+        .card-header img {
+            width: 60px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .card-header h2 {
+            font-size: 1.2em;
+            margin: 0;
+        }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    .card-detail {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+    }
+
+        .card-detail span {
+            font-weight: bold;
+        }
+
+    .card-footer {
+        padding: 20px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .price-button {
+        background-color: #ff4500;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .price-button:hover {
+            background-color: #e03e00;
+        }
+</style>
+
+<div class="header">
+    <h1>View Plans</h1>
+</div>
+
+@{
+    var plans = new[] {
+        new { Name = "Aspire Gold+ (Direct)", Logo = "https://image.shutterstock.com/image-vector/family-care-logo-260nw-342377417.jpg", CoverAmount = "₹5 Lakh", ClaimSettled = "98.2%", CoverageTill = "55 Yr", CashlessHospitals = "111", Price = "993" },
+        new { Name = "Life Care", Logo = "https://image.shutterstock.com/image-vector/medical-icons-260nw-183128435.jpg", CoverAmount = "₹12 Lakh", ClaimSettled = "99.2%", CoverageTill = "60 Yr", CashlessHospitals = "95", Price = "1150" },
+        new { Name = "PNB MetLife", Logo = "https://th.bing.com/th/id/OIP.bC3ZfAENUSWdXQe_HOVcFwAAAA?rs=1&pid=ImgDetMain", CoverAmount = "₹49.99 Lac", ClaimSettled = "99.1%", CoverageTill = "60 Yrs", CashlessHospitals = "", Price = "1050" },
+        new { Name = "Max Life", Logo = "https://th.bing.com/th/id/OIP.AFbrvJ7dw_4uhS_0g842ngAAAA?rs=1&pid=ImgDetMain", CoverAmount = "₹49.9 Lac", ClaimSettled = "99.7%", CoverageTill = "60 Yrs", CashlessHospitals = "", Price = "1044" },
+        new { Name = "TATA AIA", Logo = "https://aniportalimages.s3.amazonaws.com/media/details/Tata_AIA_Life_Brand_Logo_OBDLjtc.jpg", CoverAmount = "₹49.99 Lac", ClaimSettled = "99.0%", CoverageTill = "60 Yrs", CashlessHospitals = "", Price = "662" }
+    };
+}
+
+@foreach (var plan in plans)
+{
+    <div class="card-custom">
+        <div class="card-header">
+            <img src="@plan.Logo" alt="@plan.Name">
+            <h2>@plan.Name</h2>
+        </div>
+        <div class="card-body">
+            <div class="card-detail">
+                <span class="label">Cover amount</span>
+                <span class="value">@plan.CoverAmount</span>
+            </div>
+            <div class="card-detail">
+                <span class="label">Claim Settled</span>
+                <span class="value">@plan.ClaimSettled</span>
+            </div>
+            <div class="card-detail">
+                <span class="label">Coverage Till</span>
+                <span class="value">@plan.CoverageTill</span>
+            </div>
+            @if (!string.IsNullOrEmpty(plan.CashlessHospitals))
+            {
+                <div class="card-detail">
+                    <span class="label">Cashless hospitals</span>
+                    <span class="value">@plan.CashlessHospitals</span>
+                </div>
+            }
+        </div>
+        <div class="card-footer">
+            <button class="price-button" onclick="redirectToPremiumCalculation('@plan.Name', '@plan.CoverAmount', '@plan.Price')">₹@plan.Price/month</button>
+        </div>
+
+        <!-- Add script for redirection -->
+        <script>
+            function redirectToPremiumCalculation(plan, coverAmount, price) {
+                // Store plan details in localStorage or sessionStorage
+                localStorage.setItem('selectedPlan', JSON.stringify({ plan, coverAmount, price }));
+                
+                // Redirect to the premium calculation page
+                window.location.href = '@Url.Action("PremiumCalculation", "TermLife")';
+            }
+        </script>
+    </div>
+}
+
+@* <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    function openRazorpay(amount, plan, coverAmount) {
+        var options = {
+            "key": "rzp_test_UMVGiuA5sKQxEW", // Enter the Key ID generated from the Dashboard
+            "amount": amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 100 refers to 1 INR
+            "currency": "INR",
+            "name": "Your Company Name",
+            "description": plan,
+            "image": "https://your_logo_url", // Optional
+            "handler": function (response) {
+                // After payment completion, you can handle the response here
+                alert('Payment successful: ' + response.razorpay_payment_id);
+            },
+            "prefill": {
+                "name": "Customer Name",
+                "email": "customer@example.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "plan": plan,
+                "cover_amount": coverAmount
+            },
+            "theme": {
+                "color": "#ff4500"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    }
+</script> *@

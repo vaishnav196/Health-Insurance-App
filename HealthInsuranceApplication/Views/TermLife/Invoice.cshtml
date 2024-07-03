@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Invoice";
+}
+
+<h1>Invoice</h1>
+
+<style>
+    .invoice-container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .invoice-header {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .invoice-header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+    .invoice-details {
+        margin-bottom: 20px;
+    }
+
+        .invoice-details div {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+    .invoice-footer {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .back-button {
+        background-color: #343a40;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+        .back-button:hover {
+            background-color: #23272b;
+        }
+</style>
+
+<div class="invoice-container">
+    <div class="invoice-header">
+        <h1>Invoice</h1>
+    </div>
+    <div class="invoice-details">
+        <div>
+            <span>Plan Name:</span>
+            <span>@Model.PlanName</span>
+        </div>
+        <div>
+            <span>Cover Amount:</span>
+            <span>@Model.CoverAmount</span>
+        </div>
+        <div>
+            <span>Claim Settled:</span>
+            <span>@Model.ClaimSettled</span>
+        </div>
+        <div>
+            <span>Coverage Till:</span>
+            <span>@Model.CoverageTill</span>
+        </div>
+        <div>
+            <span>Price:</span>
+            <span>₹@Model.Price/month</span>
+        </div>
+    </div>
+    <div class="invoice-footer">
+        <button class="back-button" onclick="window.history.back()">Back to Plans</button>
+    </div>
+</div>

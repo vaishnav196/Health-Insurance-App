@@ -1,15 +1,15 @@
 ﻿
-<style>
 
-</style>
+
 <div class="container mt-5">
+    <a asp-action="PolicySelection" asp-controller="Health" class="nav-link">  <i class="fa fa-arrow-left" aria-hidden="true"></i> Back to Plans selection</a>
     <div class="row">
         <div class="col-md-8 card">
             <h1 class="text-black text-center mb-5 ">Calculate Your Premium</h1>
             <div>
                 <label for="coverage-slider" class="my-2 fw-bolder">Coverage Amount (in Lakh):</label>
-                <input type="range" id="coverage-slider" name="coverage-slider" min="7" max="100" value="7" oninput="updateCoverageValue(this.value)" class="">
-                <h3 id="coverage-value" class="font-monospace text-danger " >10 Lakh</h3>
+                <input type="range" id="coverage-slider" name="coverage-slider" min="7" max="100" value="10" oninput="updateCoverageValue(this.value)" class="">
+                <h3 id="coverage-value" class="font-monospace text-danger ">10 Lakh</h3>
             </div>
             <div>
                 <label for="policy-period" class="fw-bolder my-2">Policy Period:</label>
@@ -20,14 +20,50 @@
                     <option value="3">3 Years</option>
                 </select>
             </div>
-            <div>
-                <label class="fw-bolder my-2">Additional Coverage:</label>
-                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="500" onclick="updateAdditionalCoverage()"> ₹50,00
-                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="350" onclick="updateAdditionalCoverage()"> ₹50,00
-                 <input type="checkbox" id="additional-coverage" name="additional-coverage" value="299" onclick="updateAdditionalCoverage()"> ₹50,00
-                <input type="checkbox" id="additional-coverage" name="additional-coverage" value="190" onclick="updateAdditionalCoverage()"> ₹50,00
+            <label class="fw-bolder my-2">Additional Coverage:</label> <br />
+            <div class="d-flex justify-content-around">
+              
+                <div class="card  w-25 mx-3">
+                    <div class="card-header">
+                        Add On
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                        
+                            <footer class=""><input type="checkbox" name="additional-coverage" value="500" onclick="updateAdditionalCoverage()">₹500</footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="card  w-25 mx-3">
+                    <div class="card-header">
+                       Add on
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                          
+                            <footer class=""><input type="checkbox" name="additional-coverage" value="299" onclick="updateAdditionalCoverage()">₹299</footer>
+                        </blockquote>
+                    </div>
+                </div>
+                <div class="card  w-25 mx-3">
+                    <div class="card-header">
+                        Add on
+                    </div>
+                    <div class="card-body ">
+                        <blockquote class="blockquote mb-0">
+                           
+                            <footer class=""><input type="checkbox" name="additional-coverage" value="150" onclick="updateAdditionalCoverage()" >₹150</footer>
+                        </blockquote>
+                    </div>
+                </div>
+             @*    
+                
+               @*  <input type="checkbox" name="additional-coverage" value="350" onclick="updateAdditionalCoverage()"> ₹350
+                <input type="checkbox" name="additional-coverage" value="299" onclick="updateAdditionalCoverage()"> ₹299
+                <input type="checkbox" name="additional-coverage" value="190" onclick="updateAdditionalCoverage()"> ₹190 *@
             </div>
             <button class="continue-btn mt-3 btn btn-outline-danger w-50" onclick="calculatePremium()">Calculate Premium</button>
+            <a class="continue-btn mt-3 btn btn-outline-primary w-50"  asp-action="ViewInvoice" asp-controller="Health">Proceed to Buy</a>
         </div>
         <div class="col-md-4">
             <div class="card" style="width: 18rem;">
@@ -36,94 +72,255 @@
                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item fw-bold">GST included:18%</li>
+                    <li class="list-group-item fw-bold">GST included: 18%</li>
                     <li class="list-group-item fw-bold">Additional Taxes: 00.00</li>
                     <li class="list-group-item fw-bold" id="premium-result">Total Premium:</li>
                 </ul>
                 <div class="card-body">
-                    <button class="btn-danger btn" onclick="payNow()">Buy Plan</button>
+                   @*  <button class="btn-danger btn" id="buy-button" onclick="payNow()">Buy Plan</button> *@
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Member Details Form -->
+  @*   <div id="member-details-form" class="mt-5" style="display: none;">
+        <h2>Enter Member Details</h2>
+        <form id="member-form">
+            <!-- Member details will be dynamically added here -->
+        </form>
+        <button class="btn btn-outline-success" onclick="generateInvoice()">Generate Invoice</button>
+        <button class="btn btn-outline-danger" onclick="downloadInvoice()" disabled id="download-button">Download Invoice</button>
+    </div> *@
 </div>
 
-@section scripts {
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <script>
-        window.onload = function () {
-            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
-            document.getElementById('selected-plan-name').innerText = selectedPlan.name + ' Plan Summary';
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    window.onload = function () {
+        const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+        document.getElementById('selected-plan-name').innerText = selectedPlan.name + ' Plan Summary';
+    };
+
+    function updateCoverageValue(value) {
+        document.getElementById('coverage-value').innerText = value + ' Lakh';
+    }
+
+    function updateAdditionalCoverage() {
+        const checkboxes = document.querySelectorAll('input[name="additional-coverage"]:checked');
+        let additionalCoverage = 0;
+        checkboxes.forEach(checkbox => {
+            additionalCoverage += parseInt(checkbox.value);
+        });
+        return additionalCoverage;
+    }
+
+    function calculatePremium() {
+        const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+        const coverage = document.getElementById('coverage-slider').value;
+        const period = document.getElementById('policy-period').value;
+        const additionalCoverage = updateAdditionalCoverage();
+
+        // Calculate base premium
+        const basePrice = selectedPlan.price;
+        const coverageMultiplier = (coverage * 100000) / selectedPlan.baseCoverage;
+        const periodMultiplier = period;
+
+        let premium = basePrice * coverageMultiplier * periodMultiplier;
+        premium += additionalCoverage;
+
+        // Apply discount if more than 2 members are selected
+        const members = JSON.parse(sessionStorage.getItem('ageSelections'));
+        if (Object.keys(members).length > 2) {
+            premium *= 0.8; // 20% discount
+        }
+
+        document.getElementById('premium-result').innerText = 'Total Premium: ₹' + premium.toFixed(2);
+    }
+
+    function proceedToBuy() {
+        document.getElementById('member-details-form').style.display = 'block';
+
+        const members = JSON.parse(sessionStorage.getItem('ageSelections'));
+        const form = document.getElementById('member-form');
+        form.innerHTML = ''; // Clear previous form data
+
+        Object.keys(members).forEach(member => {
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'form-group';
+
+            const nameLabel = document.createElement('label');
+            nameLabel.innerText = `${member} Name:`;
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'form-control';
+            nameInput.name = `${member}-name`;
+
+            const ageLabel = document.createElement('label');
+            ageLabel.innerText = `${member} Age:`;
+            const ageInput = document.createElement('input');
+            ageInput.type = 'number';
+            ageInput.className = 'form-control';
+            ageInput.name = `${member}-age`;
+
+            const dobLabel = document.createElement('label');
+            dobLabel.innerText = `${member} Date of Birth:`;
+            const dobInput = document.createElement('input');
+            dobInput.type = 'date';
+            dobInput.className = 'form-control';
+            dobInput.name = `${member}-dob`;
+
+            const mobileLabel = document.createElement('label');
+            mobileLabel.innerText = 'Mobile:';
+            const mobileInput = document.createElement('input');
+            mobileInput.type = 'tel';
+            mobileInput.className = 'form-control';
+            mobileInput.name = 'mobile';
+
+            const planLabel = document.createElement('label');
+            planLabel.innerText = 'Selected Plan:';
+            const planInput = document.createElement('input');
+            planInput.type = 'text';
+            planInput.className = 'form-control';
+            planInput.name = 'plan';
+            planInput.value = JSON.parse(sessionStorage.getItem('selectedPlan')).name;
+            planInput.disabled = true;
+
+            const premiumLabel = document.createElement('label');
+            premiumLabel.innerText = 'Premium to be Paid:';
+            const premiumInput = document.createElement('input');
+            premiumInput.type = 'text';
+            premiumInput.className = 'form-control';
+            premiumInput.name = 'premium';
+            premiumInput.value = document.getElementById('premium-result').innerText.split('₹')[1].trim();
+            premiumInput.disabled = true;
+
+            memberDiv.appendChild(nameLabel);
+            memberDiv.appendChild(nameInput);
+            memberDiv.appendChild(ageLabel);
+            memberDiv.appendChild(ageInput);
+            memberDiv.appendChild(dobLabel);
+            memberDiv.appendChild(dobInput);
+            memberDiv.appendChild(mobileLabel);
+            memberDiv.appendChild(mobileInput);
+            memberDiv.appendChild(planLabel);
+            memberDiv.appendChild(planInput);
+            memberDiv.appendChild(premiumLabel);
+            memberDiv.appendChild(premiumInput);
+
+            form.appendChild(memberDiv);
+        });
+    }
+
+    function payNow() {
+        const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+        const premium = document.getElementById('premium-result').innerText.split('₹')[1].trim();
+
+        const options = {
+            "key": "rzp_test_nVRTaBmmVZ10zu",
+            "amount": premium * 100,
+            "currency": "INR",
+            "name": "Insurance Premium",
+            "description": "Test Transaction",
+            "order_id": "",
+            "handler": function (response) {
+                alert(response.razorpay_payment_id);
+                alert(response.razorpay_order_id);
+                alert(response.razorpay_signature);
+                enableDownloadButton();
+                savePurchaseDetails();
+            },
+            "prefill": {
+                "name": "Vaishnav Ghangale",
+                "email": "vaish00721@gmail.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
         };
 
-        function updateCoverageValue(value) {
-            document.getElementById('coverage-value').innerText = value + ' Lakh';
-        }
+        const rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert(response.error.code);
+            alert(response.error.description);
+            alert(response.error.source);
+            alert(response.error.step);
+            alert(response.error.reason);
+            alert(response.error.metadata.order_id);
+            alert(response.error.metadata.payment_id);
+        });
 
-        function updateAdditionalCoverage() {
-            const checkbox = document.getElementById('additional-coverage');
-            return checkbox.checked ? parseInt(checkbox.value) : 0;
-        }
+        rzp1.open();
+    }
 
-        function calculatePremium() {
-            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
-            const coverage = document.getElementById('coverage-slider').value;
-            const period = document.getElementById('policy-period').value;
-            const additionalCoverage = updateAdditionalCoverage();
+    function enableDownloadButton() {
+        document.getElementById('download-button').disabled = false;
+    }
 
-            // Calculate base premium
-            const basePrice = selectedPlan.price;
-            const coverageMultiplier = (coverage * 100000) / selectedPlan.baseCoverage;
-            const periodMultiplier = period;
+    function generateInvoice() {
+        const formData = new FormData(document.getElementById('member-form'));
+        const purchaseDetails = {};
+        formData.forEach((value, key) => {
+            purchaseDetails[key] = value;
+        });
 
-            let premium = basePrice * coverageMultiplier * periodMultiplier;
-            premium += additionalCoverage;
+        fetch('/api/purchase/generateInvoice', {
+            method: 'POST',
+            body: JSON.stringify(purchaseDetails),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'invoice.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error generating invoice:', error));
+    }
 
-            document.getElementById('premium-result').innerText = 'Total Premium: ₹' + premium.toFixed(2);
-        }
+    function downloadInvoice() {
+        // Logic to download the generated invoice, assuming it has been generated already
+        fetch('/api/purchase/downloadInvoice', {
+            method: 'GET'
+        }).then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'invoice.pdf';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading invoice:', error));
+    }
 
-        function payNow() {
-            const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
-            const premium = document.getElementById('premium-result').innerText.split('₹')[1].trim();
+    function savePurchaseDetails() {
+        const formData = new FormData(document.getElementById('member-form'));
+        const purchaseDetails = {};
+        formData.forEach((value, key) => {
+            purchaseDetails[key] = value;
+        });
 
-            const options = {
-                "key": "rzp_test_nVRTaBmmVZ10zu", // Enter the Key ID generated from the Razorpay Dashboard
-                "amount": premium * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-                "currency": "INR",
-                "name": "Insurance Premium",
-                "description": "Test Transaction",
-                "order_id": "", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-                "handler": function (response) {
-                    alert(response.razorpay_payment_id);
-                    alert(response.razorpay_order_id);
-                    alert(response.razorpay_signature);
-                    generateInvoice();
-                },
-                "prefill": {
-                    "name": "Gaurav Kumar",
-                    "email": "gaurav.kumar@example.com",
-                    "contact": "9999999999"
-                },
-                "notes": {
-                    "address": "Razorpay Corporate Office"
-                },
-                "theme": {
-                    "color": "#F37254"
-                }
-            };
-
-            const rzp1 = new Razorpay(options);
-            rzp1.on('payment.failed', function (response) {
-                alert(response.error.code);
-                alert(response.error.description);
-                alert(response.error.source);
-                alert(response.error.step);
-                alert(response.error.reason);
-                alert(response.error.metadata.order_id);
-                alert(response.error.metadata.payment_id);
-            });
-
-            rzp1.open();
-        }
-    </script>
-}
+        // Save to database
+        fetch('/api/purchase/savePurchaseDetails', {
+            method: 'POST',
+            body: JSON.stringify(purchaseDetails),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json())
+            .then(data => console.log('Purchase details saved:', data))
+            .catch(error => console.error('Error saving purchase details:', error));
+    }
+</script>

@@ -64,7 +64,7 @@ public class AuthController : Controller
         }
 
         var client = _httpClientFactory.CreateClient();
-        var requestBody = new { mobile, otp };
+        var requestBody = new {email, mobile, otp };
         var content = new StringContent(JsonConvert.SerializeObject(requestBody), Encoding.UTF8, "application/json");
 
         var response = await client.PostAsync("https://localhost:7027/verifyotp", content);

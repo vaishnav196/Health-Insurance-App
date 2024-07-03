@@ -1,0 +1,176 @@
+﻿@{
+    ViewData["Title"] = "Income";
+}
+<br />
+
+<style>
+    /*   body {
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        } */
+
+    .container-custom {
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 100%;
+        text-align: center;
+        margin: auto;
+    }
+
+        .container-custom h2 {
+            color: black;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+    .form-check {
+        margin-bottom: 15px;
+        padding: 20px;
+        background-color: grey;
+        border-radius: 5px;
+        color: black;
+    }
+
+    .form-check-input {
+        accent-color: #1e90ff;
+    }
+
+        .form-check-input[type=radio] {
+            border-radius: 50%;
+            margin: auto;
+        }
+
+    .form-check-label {
+        font-size: 1.1em;
+        color: #fff;
+    }
+
+    .btn-custom {
+        background-color: #666;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+
+        .btn-custom:hover {
+            background-color: #888;
+        }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination .dot {
+            height: 10px;
+            width: 10px;
+            margin: 0 5px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+            .pagination .dot.active {
+                background-color: #1e90ff;
+            }
+
+    .nav-links {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+    }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s;
+        }
+
+            .nav-links a:hover {
+                color: #00aced;
+            }
+
+
+    .btn-custom {
+        background-color: orange;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container-custom">
+    <h2>Select your annual income</h2>
+    <div class="mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="25+" id="income1">
+            <label class="form-check-label" for="income1">
+                25 Lac +
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="15-24.9" id="income2">
+            <label class="form-check-label" for="income2">
+                15 Lac to 24.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="10-14.9" id="income3">
+            <label class="form-check-label" for="income3">
+                10 Lac to 14.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="8-9.9" id="income4">
+            <label class="form-check-label" for="income4">
+                8 Lac to 9.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="5-7.9" id="income5">
+            <label class="form-check-label" for="income5">
+                5 Lac to 7.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="3-4.9" id="income6">
+            <label class="form-check-label" for="income6">
+                3 Lac to 4.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="2-2.9" id="income7">
+            <label class="form-check-label" for="income7">
+                2 Lac to 2.9 Lac
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="radio" name="income" value="<2" id="income8">
+            <label class="form-check-label" for="income8">
+                Less than 2 Lac
+            </label>
+        </div>
+    </div>
+    <div class="nav-links">
+        <a asp-action="Details" asp-controller="Termlife" class="btn-custom">&larr; Previous</a>
+        <a asp-action="Plan" asp-controller="Termlife" class="btn-custom">Next &rarr;</a>
+    </div>
+
+</div>

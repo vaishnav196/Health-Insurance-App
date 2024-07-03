@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "medical";
+}
+
+<style>
+    .btn-group-toggle .btn {
+        margin: 5px;
+    }
+
+    .btn-md {
+        font-size: 1.25rem;
+        padding: 0.5rem 1.25rem;
+    }
+
+    .form-check-label {
+        font-size: 1.25rem;
+    }
+
+    .btn-primary {
+        font-size: 1.25rem;
+        padding: 0.5rem 2rem;
+    }
+
+    .btn-custom {
+        background-color: #007bff;
+        text-decoration: none;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="text-center my-5">
+        <h1 class="display-4">Does any of the travellers have a pre-existing medical condition?</h1>
+        <p class="text-danger fw-bold font-monospace font-monospace">If any of the traveller have a known illness, injury or health condition like heart disease, diabetes, cancer etc which will help us cover you</p>
+        <form method="post">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="MedicalCondition" id="yes" value="Yes">
+                <label class="form-check-label" for="yes">Yes</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="MedicalCondition" id="no" value="No">
+                <label class="form-check-label" for="no">No</label>
+            </div>
+            <br />
+            <br />
+            <a asp-action="Travel" asp-controller="Travel" class="btn-custom">View Plan</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add any necessary JavaScript here
+        });
+    </script>
+}

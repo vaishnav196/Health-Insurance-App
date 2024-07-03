@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Review Details";
+}
+
+<div class="container">
+    <h3>Please review your details before proceeding</h3>
+    <div class="card">
+        <div class="card-body">
+            <h4>Personal Details</h4>
+            <p>Full Name: <span id="fullName"></span></p>
+            <p>Email Address: <span id="email"></span></p>
+            <p>Occupation: <span id="occupation"></span></p>
+            <p>Annual Income: <span id="annualIncome"></span></p>
+            <p>Education: <span id="education"></span></p>
+
+            <h4>Plan Details</h4>
+            <p>Life Cover: <span id="lifeCover"></span></p>
+            <p>Cover Till Age: <span id="coverTillAge"></span></p>
+            <p>Pay For: <span id="payFor"></span></p>
+            <p>Mode of Premium Payment: <span id="premiumMode"></span></p>
+
+            <button class="btn btn-secondary" onclick="editDetails()">Edit Details</button>
+            <button class="btn btn-primary" onclick="proceedToCheckout()">Checkout</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var details = JSON.parse(localStorage.getItem('userDetails'));
+
+        document.getElementById('fullName').textContent = details.fullName;
+        document.getElementById('email').textContent = details.email;
+        document.getElementById('occupation').textContent = details.occupation;
+        document.getElementById('annualIncome').textContent = details.annualIncome;
+        document.getElementById('education').textContent = details.education;
+        document.getElementById('lifeCover').textContent = details.lifeCover;
+        document.getElementById('coverTillAge').textContent = details.coverTillAge;
+        document.getElementById('payFor').textContent = details.payFor;
+        document.getElementById('premiumMode').textContent = details.premiumMode;
+    });
+
+    function editDetails() {
+        // Redirect to the premium calculation page
+        window.location.href = '@Url.Action("PremiumCalculation", "TermLife")';
+    }
+
+    function proceedToCheckout() {
+        // Redirect to the checkout page
+        window.location.href = '@Url.Action("Checkout", "TermLife")';
+    }
+</script>

@@ -1,0 +1,125 @@
+﻿@{
+    ViewData["Title"] = "Travel";
+}
+
+<div class="container">
+    <div class="text-center my-5">
+        <h1 class="display-4">Let's secure your travel</h1>
+        <p class="lead">Which country are you travelling to?</p>
+        <form method="post" asp-action="GetQuote">
+            <div class="form-group">
+                <input type="text" id="destinationsInput" name="destinations" class="form-control my-3 w-75 mx-auto" placeholder="Enter your destination" readonly />
+            </div>
+            <h5>Popular destinations (You can select multiple destinations)</h5>
+            <div class="d-flex justify-content-center my-3">
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="Schengen" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/Schengen.webp" class="rounded-circle destination-img" alt="Schengen" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="United Kingdom" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/United_Kingdom.webp" class="rounded-circle destination-img" alt="United Kingdom" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="USA" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/USA.webp" class="rounded-circle destination-img" alt="USA" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="Germany" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/Germany.webp" class="rounded-circle destination-img" alt="Germany" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="France" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/France.webp" class="rounded-circle destination-img" alt="France" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+                <label class="btn btn-light mx-2 destination-label">
+                    <input type="checkbox" name="destinations" value="Switzerland" class="d-none">
+                    <img src="https://static.pbcdn.in/travel-cdn/images/country/Switzerland.webp" class="rounded-circle destination-img" alt="Switzerland" style="width: 100px; height: 100px;">
+                    <div class="tick-mark">✔</div>
+                </label>
+            </div>
+            <br />
+            <br />
+            <a asp-action="tripdates" asp-controller="Travel" class="btn btn-primary btn-lg py-1 px-5">Next</a>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('input[name="destinations"]');
+            const destinationsInput = document.getElementById('destinationsInput');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    const selectedDestinations = Array.from(checkboxes)
+                        .filter(i => i.checked)
+                        .map(i => i.value)
+                        .join(', ');
+                    destinationsInput.value = selectedDestinations;
+
+                    // Update the class for visual feedback
+                    const label = checkbox.parentElement;
+                    if (checkbox.checked) {
+                        label.classList.add('selected');
+                    } else {
+                        label.classList.remove('selected');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <style>
+        .destination-label {
+            position: relative;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+            .destination-label.selected {
+                background-color: white;
+                color: #007bff;
+                transform: scale(1.1);
+            }
+
+                .destination-label.selected img {
+                    border: 2px solid white;
+                }
+
+            .destination-label .tick-mark {
+                display: none;
+                position: absolute;
+                top: 5px;
+                right: 5px;
+                background-color: white;
+                color: green;
+                border-radius: 50%;
+                padding: 2px 5px;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .destination-label.selected .tick-mark {
+                display: inline-block;
+            }
+
+        .btn-custom {
+            background-color: #007bff;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 20px;
+            font-size: 1em;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+    </style>
+}

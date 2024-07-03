@@ -1,0 +1,138 @@
+﻿
+
+
+@{
+    ViewData["Title"] = "Personaldetails";
+}
+
+<h1>Personaldetails</h1>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <a href="#" class="text-decoration-none">
+                <i class="bi bi-arrow-left"></i> Go back to plans
+            </a>
+            <h6 class="mt-3">Step 1:</h6>
+            <h4>Personal details</h4>
+            <div class="border-start border-4 border-primary ps-3 mt-3">
+                <h5>Rohit (23 yrs)</h5>
+            </div>
+
+            <form  method="post">
+                <div class="mt-3">
+                    <label class="form-label">Enter full name</label>
+                    <input class="form-control" placeholder="Rohit" />
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" id="noLastName">
+                        <label class="form-check-label" for="noLastName">
+                            Don't have a last name as per the passport
+                        </label>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Gender</label>
+                        <div>
+                            <button type="button" class="btn btn-outline-primary active">
+                                <i class="bi bi-person"></i> Male
+                            </button>
+                            <button type="button" class="btn btn-outline-primary ms-2">
+                                <i class="bi bi-person"></i> Female
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Enter date of birth (DD-MM-YYYY)</label>
+                        <input class="form-control" placeholder="07-07-2000" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Nationality</label>
+                        <input class="form-control" placeholder="Indian" />
+                    </div>
+                </div>
+
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Enter passport number</label>
+                        <input class="form-control" placeholder="HD3823878" />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Select visa type</label>
+                        <select class="form-select">
+                            <option>Tourist/Visitor Visa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <p class="mb-1">Don't remember your passport number?</p>
+                    <a href="#" class="text-decoration-none">
+                        Get the form completion link on WhatsApp <i class="bi bi-whatsapp text-success"></i>
+                    </a>
+                </div>
+
+                <div class="mt-3">
+                    <label class="form-label">Enter pan number</label>
+                    <input class="form-control" />
+                    <div class="form-check mt-1">
+                        <input class="form-check-input" type="checkbox" id="noPanCard" checked>
+                        <label class="form-check-label" for="noPanCard">
+                            I don't have a pancard
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <h5>Nominee Details</h5>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-label">Enter nominee full name</label>
+                            <input class="form-control" placeholder="Coordinate Look" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Select nominee relation</label>
+                            <select class="form-select">
+                                <option>Mother</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <a type="submit" class="btn btn-primary w-100" asp-action="Medicalhistory" asp-controller="Travel">Continue</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Premium Summary</h5>
+                    <div class="mt-3">
+                        <a href="#" class="text-decoration-none">Trip Details <i class="bi bi-chevron-down"></i></a>
+                    </div>
+                    <div class="mt-3">
+                        <p class="mb-1">Plan for: Rohit (23 yrs)</p>
+                        <h6>Travel Guard Plus Gold Without Sublimit</h6>
+                        <p class="mb-1">Sum Insured: $250,000</p>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between">
+                            <p>Premium</p>
+                            <p>₹1,863/-</p>
+                        </div>
+                        <div class="d-flex justify-content-between fw-bold">
+                            <p>TOTAL PREMIUM</p>
+                            <p>₹1,863/-</p>
+                        </div>
+                        <p class="text-muted small">GST included</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

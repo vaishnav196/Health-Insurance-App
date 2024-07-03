@@ -1,0 +1,164 @@
+﻿@{
+    ViewData["Title"] = "Travel";
+}
+
+<h1 class="text-center">Travel</h1>
+<style>
+    .plan-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        margin-bottom: 15px;
+    }
+
+    .plan-header {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .plan-body {
+        padding: 15px;
+    }
+
+    .feature-label {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    .feature-value {
+        font-weight: bold;
+    }
+
+    .new-launch {
+        background-color: #e8f5e9;
+        color: #4caf50;
+        font-size: 0.8rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+    }
+
+    .exclusive-offer {
+        color: #9c27b0;
+        font-size: 0.8rem;
+    }
+
+    .claim-assistance {
+        background-color: #e3f2fd;
+        border-radius: 8px;
+        padding: 15px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        
+        <div>
+            <span class="me-3">United Kingdom | 1 member | 3 Jul - 7 Aug <a href="#" class="text-primary">Edit ></a></span>
+            <a href="#" class="text-primary me-3"><i class="bi bi-envelope"></i> Email quotes</a>
+            <a href="#" class="text-primary"><i class="bi bi-telephone"></i> Need help?</a>
+        </div>
+    </div>
+
+    <h2 class="mb-4">Showing 14 plans for 1 member</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="mb-3">
+                <label for="sortBy" class="form-label">Sort by</label>
+                <select class="form-select" id="sortBy">
+                    <option>Premium - Low to High</option>
+                    <option>Premium - High to Low</option>
+                </select>
+            </div>
+
+            <h5>Filters</h5>
+            <div class="mb-3">
+                <h6>Plan Type</h6>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="planType" id="singleTrip" checked>
+                    <label class="form-check-label" for="singleTrip">Single trip plans</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="planType" id="frequentFlyer">
+                    <label class="form-check-label" for="frequentFlyer">Frequent flyer plans</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="planType" id="student">
+                    <label class="form-check-label" for="student">Student plans</label>
+                </div>
+            </div>
+
+            <!-- Add more filter sections here -->
+        </div>
+
+        <div class="col-md-9">
+            @foreach (var plan in new[] {
+            new { Name = "Tata AIG", Product = "Travel Guard Plus Gold", Logo = "https://th.bing.com/th/id/R.7ebad5ac225d3a09288cfceaaec0602f?rik=xOQllTPZMjw6ZQ&riu=http%3a%2f%2fimage3.mouthshut.com%2fimages%2fimagesp%2f925030230s.png&ehk=vhAsXDkhoUBKsOiL3z58HWe9KFSxXnKO1DgSZHJXIf8%3d&risl=&pid=ImgRaw&r=0", MedicalExpenses = 250000, LossOfPassport = 250, BaggageLoss = 300, Premium = 1863 },
+            new { Name = "Reliance", Product = "Travel Care Individual", Logo = "https://www.liblogo.com/img-logo/re4567r62a-reliance-industries-logo-reliance-industries-limited-logo-logo-and-symbol-meaning-history.png", MedicalExpenses = 250000, LossOfPassport = 300, BaggageLoss = 1200, Premium = 1686 },
+            new { Name = "Care Health", Product = "Explore Gold - Excluding US & Canada", Logo = "https://mediasamosa.com/wp-content/uploads/2020/09/Care-Health-Insurance.jpg", MedicalExpenses = 200000, LossOfPassport = 300, BaggageLoss = 750, Premium = 2072 }
+            })
+            {
+                <div class="plan-card">
+                    <div class="plan-header d-flex justify-content-between align-items-center">
+                        <div>
+                            <img src="@plan.Logo" alt="@plan.Name" height="40" class="me-2">
+                            <strong>@plan.Name</strong>
+                            <div>@plan.Product</div>
+                            <a href="#" class="text-primary">1 more plan ></a>
+                        </div>
+                       @*  <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="compare-@plan.Name">
+                            <label class="form-check-label" for="compare-@plan.Name">Compare</label>
+                        </div> *@
+                    </div>
+                    <div class="plan-body row">
+                        <div class="col-md-8">
+                            <div class="row mb-2">
+                                <div class="col-6">
+                                    <div class="feature-label">Medical Expenses</div>
+                                    <div class="feature-value">$@plan.MedicalExpenses.ToString("N0")</div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="feature-label">Loss of Passport</div>
+                                    <div class="feature-value">$@plan.LossOfPassport</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="feature-label">Baggage Loss</div>
+                                    <div class="feature-value">$@plan.BaggageLoss</div>
+                                </div>
+                                <div class="col-6">
+                                    <a href="#" class="text-primary">View all features ></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 text-end">
+                            @if (plan.Name == "Tata AIG")
+                            {
+                                <span class="new-launch mb-2 d-inline-block">New Launch</span>
+                            }
+                            @if (plan.Name == "Reliance")
+                            {
+                                <div class="exclusive-offer mb-2">* Exclusive, 100% SI coverage for PED in critical condition*</div>
+                            }
+                            <div class="feature-label">Premium (GST included)</div>
+                            <div class="feature-value mb-2">₹@plan.Premium.ToString("N0")</div>
+                            <a class="btn btn-primary" asp-action="Personaldetails" asp-controller="Travel">Buy now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="claim-assistance mt-4">
+                <div class="d-flex align-items-center">
+                    <img src="/images/claim-assistance-icon.png" alt="Claim Assistance" height="40" class="me-3">
+                    <div>
+                        <h5 class="mb-0">Claim Assistance Anytime, Anywhere</h5>
+                        <p class="mb-0">You can get in touch with our claims support team in case of any emergency by just clicking on the link which will be shared on your WhatsApp.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

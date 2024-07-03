@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HealthInsuranceApplication.Controllers
 {
+  
     public class HealthController : Controller
-    {
+    {       
         public IActionResult Index()
         {
             return View();
@@ -22,6 +24,11 @@ namespace HealthInsuranceApplication.Controllers
         }
 
         public IActionResult PremiumCalculator()
+        {
+            return View();
+        }
+
+        public IActionResult ViewInvoice()
         {
             return View();
         }

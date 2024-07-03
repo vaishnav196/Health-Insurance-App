@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "tripdates";
+}
+
+<style>
+    .btn-custom {
+        background-color: #007bff;
+        text-decoration: none;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+
+    .col-md-6 {
+        margin: auto;
+        width: 50%;
+    }
+
+</style>
+
+<div class="container mt-5">
+    <div class="text-center my-5">
+        <h1 class="display-4">When are you travelling?</h1>
+        <p>Don't worry, you can change your trip dates at a later stage.</p>
+        <br />
+
+        <form method="post" asp-action="GetQuote" class="mx-auto">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="startDate">Start date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate">
+                </div>
+                <br />
+                <div class="form-group col-md-6">
+                    <label for="endDate">End date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate">
+                </div>
+                <br />
+            </div>
+            <div class="form-group">
+                <label for="tripDuration">Trip Duration: <span id="tripDuration">0</span> days</label>
+            </div>
+            <br />
+            <br />
+            <a asp-action="Viewplan" asp-controller="Travel" class="btn-custom">Next</a>
+        </form>
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const startDateInput = document.getElementById('startDate');
+            const endDateInput = document.getElementById('endDate');
+            const tripDurationSpan = document.getElementById('tripDuration');
+
+            function updateTripDuration() {
+                const startDate = new Date(startDateInput.value);
+                const endDate = new Date(endDateInput.value);
+                const duration = (endDate - startDate) / (1000 * 60 * 60 * 24);
+                tripDurationSpan.textContent = duration > 0 ? duration : 0;
+            }
+
+            startDateInput.addEventListener('change', updateTripDuration);
+            endDateInput.addEventListener('change', updateTripDuration);
+        });
+    </script>
+}

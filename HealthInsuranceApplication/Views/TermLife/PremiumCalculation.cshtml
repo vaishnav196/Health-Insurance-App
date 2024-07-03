@@ -1,0 +1,143 @@
+﻿@{
+    ViewData["Title"] = "Premium Calculation";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Select Plan Details</h3>
+            <div class="form-group">
+                <label for="lifeCover">Life Cover</label>
+                <select id="lifeCover" class="form-control" onchange="calculatePremium()">
+                    <option value="25">25 Lacs</option>
+                    <option value="50">50 Lacs</option>
+                    <option value="75">75 Lacs</option>
+                    <option value="100">1 Crore</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="coverTillAge">Cover Till Age</label>
+                <select id="coverTillAge" class="form-control" onchange="calculatePremium()">
+                    @for (int i = 35; i <= 85; i++)
+                    {
+                        <option value="@i">@i Years</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="payFor">Pay For</label>
+                <select id="payFor" class="form-control" onchange="calculatePremium()">
+                    @for (int i = 5; i <= 37; i++)
+                    {
+                        <option value="@i">@i Years</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="premiumMode">Mode of Premium Payment</label>
+                <select id="premiumMode" class="form-control" onchange="calculatePremium()">
+                    <option value="Monthly">Monthly</option>
+                    <option value="Quarterly">Quarterly</option>
+                    <option value="HalfYearly">Half Yearly</option>
+                    <option value="Yearly">Yearly</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <h3>Enter Your Details</h3>
+            <form id="detailsForm" class="">
+                <div class="form-group">
+                    <label for="fullName">Full Name</label>
+                    <input type="text" id="fullName" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="occupation">Occupation</label>
+                    <input type="text" id="occupation" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="annualIncome">Annual Income</label>
+                    <input type="number" id="annualIncome" class="form-control" required />
+                </div>
+                <div class="form-group">
+                    <label for="education">Education</label>
+                    <input type="text" id="education" class="form-control" required />
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h4>Plans Selected Amount: <span id="premiumAmt">₹0 </span></h4>
+                        <h4>Premium Amount: <span id="premiumAmount">₹0 </span></h4>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-primary mt-3" onclick="proceedToReview()">Proceed</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculatePremium() {
+        var lifeCover = document.getElementById('lifeCover').value;
+        var coverTillAge = document.getElementById('coverTillAge').value;
+        var payFor = document.getElementById('payFor').value;
+        var premiumMode = document.getElementById('premiumMode').value;
+        selectedPlan = localStorage.getItem("selectedPlan");
+        //var updatedPremium = document.getElementById("premiumAmount").value;
+
+
+        // Basic premium calculation logic (customize as needed)
+        var basePremium = (parseInt(lifeCover) * 1000) / parseInt(payFor);
+
+        // Adjust premium based on cover till age
+        if (parseInt(coverTillAge) > 60) {
+            basePremium *= 1.2;
+        }
+
+        // Adjust premium based on premium mode
+        switch (premiumMode) {
+            case 'Quarterly':
+                basePremium *= 4;
+                break;
+            case 'HalfYearly':
+                basePremium *= 2;
+                break;
+            case 'Yearly':
+                break;
+            case 'Monthly':
+            default:
+                basePremium /= 12;
+        }
+        document.getElementById('premiumAmt').textContent = '₹' + JSON.parse(selectedPlan).price;
+        document.getElementById('premiumAmount').textContent = '₹' + basePremium.toFixed(2);
+    }
+
+    function proceedToReview() {
+        // Collect form data
+        var details = {
+            fullName: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            occupation: document.getElementById('occupation').value,
+            annualIncome: document.getElementById('annualIncome').value,
+            education: document.getElementById('education').value,
+            lifeCover: document.getElementById('lifeCover').value,
+            coverTillAge: document.getElementById('coverTillAge').value,
+            payFor: document.getElementById('payFor').value,
+            premiumMode: document.getElementById('premiumMode').value,
+            premiumAmount: document.getElementById('premiumAmount').textContent
+        };
+
+        // Store details in localStorage or sessionStorage
+        localStorage.setItem('userDetails', JSON.stringify(details));
+        
+
+        // Redirect to the review page
+        window.location.href = '@Url.Action("ReviewDetails", "TermLife")';
+    }
+
+    // Initial premium calculation
+    calculatePremium();
+</script>

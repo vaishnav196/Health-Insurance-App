@@ -1,0 +1,103 @@
+﻿@{
+    ViewData["Title"] = "Viewplan";
+}
+
+<h1>Viewplan</h1>
+
+<style>
+    .btn-group-toggle .btn {
+        margin: 5px;
+    }
+
+    .btn-md {
+        font-size: 1.25rem;
+        padding: 0.5rem 1.25rem;
+    }
+
+    .form-group label {
+        font-size: 1.25rem;
+    }
+
+    .form-control {
+        font-size: 1.25rem;
+        margin: auto;
+        width: 500px;
+    }
+
+    .btn-custom {
+        background-color: #007bff;
+        text-decoration: none;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px 20px;
+        font-size: 1em;
+        transition: background-color 0.3s;
+        cursor: pointer;
+    }
+</style>
+
+<div class="container">
+    <div class="text-center my-5">
+        <h1 class="display-4">How many people are travelling?</h1>
+        <br />
+        <form method="post">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-primary">
+                    <input type="radio" name="NumberOfTravelers" value="1" /> 1
+                </label>
+                <label class="btn btn-outline-primary">
+                    <input type="radio" name="NumberOfTravelers" value="2" /> 2
+                </label>
+                <label class="btn btn-outline-primary">
+                    <input type="radio" name="NumberOfTravelers" value="3" /> 3
+                </label>
+                <label class="btn btn-outline-primary">
+                    <input type="radio" name="NumberOfTravelers" value="4" /> 4+
+                </label>
+            </div>
+
+            <div id="travelersAgeInputs" class="mt-4">
+                <!-- Dynamic age inputs will be inserted here -->
+            </div>
+            <br />
+            <a asp-action="medical" asp-controller="Travel" class="btn-custom">Next</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const travelerButtons = document.querySelectorAll('input[name="NumberOfTravelers"]');
+            const ageInputsContainer = document.getElementById('travelersAgeInputs');
+
+            travelerButtons.forEach(button => {
+                button.addEventListener('change', function () {
+                    const numberOfTravelers = parseInt(this.value);
+                    ageInputsContainer.innerHTML = ''; // Clear existing inputs
+
+                    for (let i = 1; i <= numberOfTravelers; i++) {
+                        const ageInputHtml = `
+                                    <div class="form-group">
+                                        <label for="traveler${i}Age">Select age of traveler ${i}</label>
+                                        <select name="Travelers[${i - 1}].Age" class="form-control">
+                                            ${generateAgeOptions()}
+                                        </select>
+                                    </div>
+                                `;
+                        ageInputsContainer.insertAdjacentHTML('beforeend', ageInputHtml);
+                    }
+                });
+            });
+
+            function generateAgeOptions() {
+                let options = '';
+                for (let age = 1; age <= 100; age++) {
+                    options += `<option value="${age}">${age} years</option>`;
+                }
+                return options;
+            }
+        });
+    </script>
+}

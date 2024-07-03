@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container">
+    <h3>Checkout</h3>
+    <p>Redirecting to Razorpay...</p>
+    <a class="nav-link text-black" asp-action="Index" asp-controller="Home"> <i class="fa fa-arrow-left" aria-hidden="true"></i>Back to Home</a>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var details = JSON.parse(localStorage.getItem('userDetails'));
+        var plan = JSON.parse(localStorage.getItem('selectedPlan'));
+        //var updatedPrice = JSON.parse(localStorage.getItem('updatedPremium'));
+
+        var options = {
+            "key": "rzp_test_UMVGiuA5sKQxEW",
+            "amount": plan.price * 100,
+            "currency": "INR",
+            "name": "Your Company Name",
+            "description": plan.plan,
+            "image": "https://your_logo_url",
+            "handler": function (response) {
+                alert('Payment successful: ' + response.razorpay_payment_id);
+            },
+            "prefill": {
+                "name": details.fullName,
+                "email": details.email,
+                "contact": "9999999999"
+            },
+            "notes": {
+                "plan": plan.plan,
+                "cover_amount": plan.coverAmount
+            },
+            "theme": {
+                "color": "#ff4500"
+            }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    });
+</script>

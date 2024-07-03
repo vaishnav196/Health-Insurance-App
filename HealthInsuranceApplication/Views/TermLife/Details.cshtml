@@ -1,0 +1,140 @@
+﻿@{
+    ViewData["Title"] = "Details";
+}
+
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .card-title {
+        font-size: 1.8em;
+        font-weight: bold;
+        color: #333;
+        text-align: center; /* Center align the card title */
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 1em;
+        width: 100%;
+    }
+
+    .btn-lg {
+        padding: .5rem 1rem;
+        font-size: 1.25rem;
+        border-radius: .3rem;
+        background-color: orange;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+
+
+    #btn1 {
+        padding: 0;
+        border: 1px solid #0065ff;
+        line-height: 18px;
+        margin: 10px 0 0 6px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: #0065ff;
+        padding: 0 12px 0 15px;
+        position: relative;
+        margin-bottom: 14px;
+        text-align: center;
+    }
+</style>
+
+<div class="container-fluid text-dark py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+
+            <h1 class="text-center mb-3">
+                <span class="text-info">₹1 Crore</span> life cover starting from <span class="text-info">₹473</span><small>/month<sup>+</sup></small>
+            </h1>
+
+            <p class="text-center">
+                <span class="badge bg-success">Get an online discount of upto 10%*</span>
+            </p>
+
+            <form asp-page-handler="SubmitForm" method="post" class="mt-4">
+                <div class="mb-3 text-center">
+                    <div class="btn-group" role="group">
+                        <input type="radio" class="btn-check" name="gender" id="male" value="male" checked>
+                        <label class="btn btn-outline-dark" for="male">Male</label>
+                        <input type="radio" class="btn-check" name="gender" id="female" value="female">
+                        <label class="btn btn-outline-dark" for="female">Female</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <input type="text" class="form-control bg-light text-dark" id="name" placeholder="Enter Your Name">
+                </div>
+
+                <div class="mb-3">
+                    <input type="text" class="form-control bg-light text-dark" id="dob" placeholder="DD/MM/YYYY">
+                </div>
+
+                <div class="mb-3">
+                    <div class="input-group">
+                        <select class="form-select  bg-light text-dark">
+                            <option value="+91">India</option>
+                        </select>
+                        <input type="tel" class="form-control  bg-light text-dark" id="phone" placeholder="Mobile Number">
+                    </div>
+                </div>
+
+                <div class="d-grid gap-2">
+
+                    <a asp-action="Income" asp-controller="Termlife" class="btn btn-orange  btn-info w-50 d-block  m-auto ">View Plans</a>
+                </div>
+
+                <div class="mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="certifiedExpert" checked>
+                        <label class="form-check-label" for="certifiedExpert">
+                            Only certified Policybazaar expert will assist you
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="whatsappUpdates" checked>
+                        <label class="form-check-label" for="whatsappUpdates">
+                            Get updates on WhatsApp
+                        </label>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</div>

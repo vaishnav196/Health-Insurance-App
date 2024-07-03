@@ -1,0 +1,220 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<!-- Member Details Form -->
+<div id="member-details-form" class="mt-5" ">
+    <h2>Enter Member Details</h2>
+    <form id="member-form">
+        <!-- Member details will be dynamically added here -->
+    </form>
+    <button class="btn btn-outline-success" onclick="generateInvoice()">Generate Invoice</button>
+    <button class="btn btn-outline-danger" onclick="payNow()">Buy Plan</button>
+    <button class="btn btn-outline-primary" onclick="downloadInvoice()" disabled id="download-button">Download Invoice</button>
+</div>
+
+<script>
+    window.onload = function () {
+        const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+        document.getElementById('selected-plan-name').innerText = selectedPlan.name + ' Plan Summary';
+    };
+
+    function updateCoverageValue(value) {
+        document.getElementById('coverage-value').innerText = value + ' Lakh';
+    }
+
+    function updateAdditionalCoverage() {
+        const checkboxes = document.querySelectorAll('input[name="additional-coverage"]:checked');
+        let additionalCoverage = 0;
+        checkboxes.forEach(checkbox => {
+            additionalCoverage += parseInt(checkbox.value);
+        });
+        return additionalCoverage;
+    }
+
+    function calculatePremium() {
+        const selectedPlan = JSON.parse(sessionStorage.getItem('selectedPlan'));
+        const coverage = document.getElementById('coverage-slider').value;
+        const period = document.getElementById('policy-period').value;
+        const additionalCoverage = updateAdditionalCoverage();
+
+        // Calculate base premium
+        const basePrice = selectedPlan.price;
+        const coverageMultiplier = (coverage * 100000) / selectedPlan.baseCoverage;
+        const periodMultiplier = period;
+
+        let premium = basePrice * coverageMultiplier * periodMultiplier;
+        premium += additionalCoverage;
+
+        // Apply discount if more than 2 members are selected
+        const members = JSON.parse(sessionStorage.getItem('ageSelections'));
+        if (Object.keys(members).length > 2) {
+            premium *= 0.8; // 20% discount
+        }
+
+        document.getElementById('premium-result').innerText = 'Total Premium: ₹' + premium.toFixed(2);
+        sessionStorage.setItem('totalPremium', premium.toFixed(2));
+    }
+
+    function proceedToBuy() {
+        document.getElementById('member-details-form').style.display = 'block';
+
+        const members = JSON.parse(sessionStorage.getItem('ageSelections'));
+        const form = document.getElementById('member-form');
+        form.innerHTML = ''; // Clear previous form data
+
+        Object.keys(members).forEach(member => {
+            const memberDiv = document.createElement('div');
+            memberDiv.className = 'form-group';
+
+            const nameLabel = document.createElement('label');
+            nameLabel.innerText = `${member} Name:`;
+            const nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'form-control';
+            nameInput.name = `${member}-name`;
+
+            const ageLabel = document.createElement('label');
+            ageLabel.innerText = `${member} Age:`;
+            const ageInput = document.createElement('input');
+            ageInput.type = 'number';
+            ageInput.className = 'form-control';
+            ageInput.name = `${member}-age`;
+
+            const dobLabel = document.createElement('label');
+            dobLabel.innerText = `${member} Date of Birth:`;
+            const dobInput = document.createElement('input');
+            dobInput.type = 'date';
+            dobInput.className = 'form-control';
+            dobInput.name = `${member}-dob`;
+
+            const mobileLabel = document.createElement('label');
+            mobileLabel.innerText = 'Mobile:';
+            const mobileInput = document.createElement('input');
+            mobileInput.type = 'tel';
+            mobileInput.className = 'form-control';
+            mobileInput.name = 'mobile';
+
+            const planLabel = document.createElement('label');
+            planLabel.innerText = 'Selected Plan:';
+            const planInput = document.createElement('input');
+            planInput.type = 'text';
+            planInput.className = 'form-control';
+            planInput.name = 'plan';
+            planInput.value = JSON.parse(sessionStorage.getItem('selectedPlan')).name;
+            planInput.disabled = true;
+
+            const premiumLabel = document.createElement('label');
+            premiumLabel.innerText = 'Premium to be Paid:';
+            const premiumInput = document.createElement('input');
+            premiumInput.type = 'text';
+            premiumInput.className = 'form-control';
+            premiumInput.name = 'premium';
+            premiumInput.value = sessionStorage.getItem('totalPremium');
+            premiumInput.disabled = true;
+
+            memberDiv.appendChild(nameLabel);
+            memberDiv.appendChild(nameInput);
+            memberDiv.appendChild(ageLabel);
+            memberDiv.appendChild(ageInput);
+            memberDiv.appendChild(dobLabel);
+            memberDiv.appendChild(dobInput);
+            memberDiv.appendChild(mobileLabel);
+            memberDiv.appendChild(mobileInput);
+            memberDiv.appendChild(planLabel);
+            memberDiv.appendChild(planInput);
+            memberDiv.appendChild(premiumLabel);
+            memberDiv.appendChild(premiumInput);
+
+            form.appendChild(memberDiv);
+        });
+    }
+
+    function payNow() {
+        const premium = sessionStorage.getItem('totalPremium');
+
+        const options = {
+            "key": "rzp_test_nVRTaBmmVZ10zu",
+            "amount": premium * 100,
+            "currency": "INR",
+            "name": "Insurance Premium",
+            "description": "Test Transaction",
+            "order_id": "",
+            "handler": function (response) {
+                alert('Payment Successful: ' + response.razorpay_payment_id);
+                enableDownloadButton();
+                savePurchaseDetails();
+            },
+            "prefill": {
+                "name": "Vaishnav Ghangale",
+                "email": "vaish00721@gmail.com",
+                "contact": "9999999999"
+            },
+            "notes": {
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+
+        const rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', function (response) {
+            alert('Payment Failed: ' + response.error.description);
+        });
+
+        rzp1.open();
+    }
+
+    function enableDownloadButton() {
+        document.getElementById('download-button').disabled = false;
+    }
+
+    function generateInvoice() {
+        const formData = new FormData(document.getElementById('member-form'));
+        const purchaseDetails = {};
+        formData.forEach((value, key) => {
+            purchaseDetails[key] = value;
+        });
+
+        // Mocked invoice generation and display on UI
+        const invoiceDiv = document.createElement('div');
+        invoiceDiv.id = 'invoice';
+        invoiceDiv.innerHTML = `
+                <h3>Invoice</h3>
+                <p>Name: ${purchaseDetails['0-name']}</p>
+                <p>Plan: ${purchaseDetails['plan']}</p>
+                <p>Premium: ₹${purchaseDetails['premium']}</p>
+            `;
+        document.body.appendChild(invoiceDiv);
+    }
+
+    function downloadInvoice() {
+        const invoiceDiv = document.getElementById('invoice');
+        if (!invoiceDiv) {
+            alert('Please generate the invoice first.');
+            return;
+        }
+
+        // Logic to download the generated invoice as PDF
+        const element = document.createElement('a');
+        const file = new Blob([invoiceDiv.innerHTML], { type: 'text/html' });
+        element.href = URL.createObjectURL(file);
+        element.download = 'invoice.html';
+        document.body.appendChild(element);
+        element.click();
+    }
+
+    function savePurchaseDetails() {
+        const formData = new FormData(document.getElementById('member-form'));
+        const purchaseDetails = {};
+        formData.forEach((value, key) => {
+            purchaseDetails[key] = value;
+        });
+
+        // Save to session storage
+        sessionStorage.setItem('purchaseDetails', JSON.stringify(purchaseDetails));
+    }
+</script>

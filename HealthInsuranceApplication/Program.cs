@@ -1,13 +1,27 @@
+using HealthInsuranceApplication.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 var builder = WebApplication.CreateBuilder(args);
+//builder.Services.AddSession();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+   options.UseSqlServer(
+       builder.Configuration.GetConnectionString("dbconn")
 
+));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpClient();
-builder.Services.AddHttpContextAccessor();
+
 
 builder.Services.AddAuthentication(options =>
 {
@@ -28,13 +42,7 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod());
 });
 
-builder.Services.AddSession();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
+
 
 builder.Services.AddDistributedMemoryCache();
 

@@ -192,7 +192,8 @@
 
      <div class="container">
         <div class="grid">
-            <a class="grid-item nav-link" href="">
+            
+            <a class="grid-item nav-link" asp-action="Details"  asp-controller="TermLife">
                 <img src="~/Images/th.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Term Life Insurance</h3>
                 <p>Upto 10% Discount</p>
@@ -222,11 +223,12 @@
                 <h3>Family Health Insurance</h3>
                 <p>Upto 25% Discount</p>
             </div>
-            <div class="grid-item">
+
+            <a class="grid-item" asp-action="Index" asp-controller="Travel">
             <img src="~/Images/tr.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Travel Insurance</h3>
             <p>Upto 75% Discount</p>
-            </div>
+            </a>
             <div class="grid-item">
             <img src="~/Images/home.jpg" alt="Term Life Insurance" width="100px" height="50%">
                 <h3>Home Insurance</h3>

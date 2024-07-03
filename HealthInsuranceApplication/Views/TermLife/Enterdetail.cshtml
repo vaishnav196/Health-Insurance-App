@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Enterdetail";
+}
+
+<style>
+    .container-custom {
+        max-width: 600px;
+        margin: 50px auto; /* Adjust margin for spacing */
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px; /* Increase margin for spacing */
+    }
+
+    .btn-submit {
+        background-color: #28a745; /* Bootstrap success color */
+        color: white;
+        width: 100%; /* Make the button full-width */
+        font-size: 1.2em; /* Increase font size for better readability */
+        padding: 12px; /* Adjust padding for better button size */
+    }
+
+        .btn-submit:hover {
+            background-color: #218838; /* Darker shade of green on hover */
+        }
+
+    .progress-bar-custom {
+        width: 100%;
+        background-color: #e9ecef;
+        height: 30px;
+        border-radius: 8px;
+        overflow: hidden;
+        margin-bottom: 30px; /* Increase margin for spacing */
+    }
+
+    .progress {
+        height: 100%;
+        width: 25%;
+        background-color: #1a8cff;
+        text-align: center;
+        line-height: 30px;
+        color: white;
+        border-radius: 8px;
+    }
+
+    .form-label {
+        font-weight: bold;
+    }
+
+    .form-control {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .form-select {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 12px;
+        font-size: 1em;
+    }
+</style>
+
+<div class="container-custom">
+    <div class="progress-bar-custom">
+        <div class="progress" id="progress">25%</div>
+    </div>
+    <h2>Enter Insurance Policy Details</h2>
+    <form id="insurance-form" method="post" action="SubmitForm">
+        <div class="mb-3">
+            <label for="name" class="form-label">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+        <div class="mb-3">
+            <label for="annual-income" class="form-label">Annual Income:</label>
+            <input type="text" class="form-control" id="annual-income" name="annual-income" required>
+        </div>
+        <div class="mb-3">
+            <label for="income-type" class="form-label">Type of Income:</label>
+            <select class="form-select" id="income-type" name="income-type" required>
+                <option value="salary">Salary</option>
+                <option value="business">Business</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="package-cover" class="form-label">Package Cover:</label>
+            <select class="form-select" id="package-cover" name="package-cover" required>
+                <option value="basic">Basic</option>
+                <option value="standard">Standard</option>
+                <option value="premium">Premium</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="age" class="form-label">Age:</label>
+            <select class="form-select" id="age" name="age" required>
+                <option value="18-30">18-30</option>
+                <option value="31-45">31-45</option>
+                <option value="46-60">46-60</option>
+                <option value="61+">61+</option>
+            </select>
+        </div>
+        <button type="submit" id="submit" class="btn btn-submit">Submit</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById('insurance-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const url = 'https://localhost:7202/Download';
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'invoice.pdf'; // Adjust the filename and extension based on your file
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('There was a problem with the fetch operation:', error));
+    });
+</script>
